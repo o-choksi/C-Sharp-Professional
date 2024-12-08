@@ -1,6 +1,6 @@
 using System;
 
-namespace KeyotiRapidSpellNamespaceGuide
+namespace KeyotiRapidSpell
 {
     // Core RapidSpell functionality
     using Keyoti.RapidSpell;

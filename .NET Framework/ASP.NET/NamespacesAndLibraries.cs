@@ -2,7 +2,7 @@
 
 using System;
 
-namespace AspNetNamespaceGuide
+namespace AspNet
 {
     // Core ASP.NET MVC functionality
     using Microsoft.AspNetCore.Mvc;
