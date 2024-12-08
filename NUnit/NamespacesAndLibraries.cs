@@ -1,14 +1,110 @@
-// NUnit framework namespace for attributes used in test methods
-using NUnit.Framework; // Provides the core attributes (like [Test], [SetUp], [TearDown]) and assertions used in writing tests with NUnit.
+using System;
 
-// NUnit namespace for dealing with constraints in assertions
-using NUnit.Framework.Constraints; // Contains classes that represent conditions (constraints) used in assertions, such as Is.EqualTo, Is.Not.Null, etc.
+namespace NUnit
+{
+    // Basic Assertions
+    using NUnit.Framework;
+    public class BasicAssertionsExample {
+        private readonly Calculator _calculator = new Calculator();
+        [Test]
+        public void TestAddition() {
+            Assert.That(_calculator.Add(2, 2), Is.EqualTo(4));
+            Assert.That(_calculator.Add(-1, 1), Is.Zero);
+        }
+    }
 
-// NUnit namespace for working with mock objects and verifying their behavior
-using NUnit.Framework.Mocking; // Provides classes and interfaces to support mocking in tests. (Note: NUnit itself doesn't include a mocking framework; typically, a third-party library like Moq or NSubstitute is used).
+    // Collection Assertions
+    using NUnit.Framework.Constraints;
+    public class CollectionAssertionsExample {
+        private readonly List<int> _numbers = new List<int> { 1, 2, 3 };
+        [Test]
+        public void TestCollection() {
+            Assert.That(_numbers, Has.Member(2));
+            Assert.That(_numbers, Is.Ordered);
+        }
+    }
 
-// NUnit namespace for custom assertions and extensions
-using NUnit.Framework.Assertions; // Used to create custom assertions or extend existing assertions with new functionality.
+    // Legacy Exception Handling
+    using NUnit.Framework.Legacy;
+    public class LegacyExceptionExample {
+        [Test]
+        public void TestException() {
+            Assert.Throws(typeof(DivideByZeroException), () => Divide(1, 0));
+            Assert.Catch<ArgumentException>(() => ProcessNegative(-1));
+        }
+    }
 
-// NUnit namespace for running tests within a specific context or with special settings
-using NUnit.Framework.Internal; // Provides classes and methods for internal NUnit use, such as managing test contexts, logging, and custom settings during test execution.
+    // COM Interop Testing
+    using NUnit.Framework.Internal;
+    public class ComInteropExample {
+        [Test]
+        public void TestComObject() {
+            dynamic excel = Activator.CreateInstance(Type.GetTypeFromProgID("Excel.Application"));
+            Assert.That(excel, Is.Not.Null);
+            Marshal.ReleaseComObject(excel);
+        }
+    }
+
+    // Windows Forms Testing
+    using NUnit.Framework.Internal.Commands;
+    public class WinFormsExample {
+        private Form _testForm;
+        [Test, STAThread]
+        public void TestFormLoad() {
+            _testForm = new Form();
+            Assert.That(_testForm.IsHandleCreated, Is.False);
+            _testForm.Show();
+            Assert.That(_testForm.IsHandleCreated, Is.True);
+        }
+    }
+
+    // Registry Access Testing
+    using NUnit.Framework.Internal.Execution;
+    public class RegistryExample {
+        [Test]
+        public void TestRegistryAccess() {
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey("Software"))
+            {
+                Assert.That(key, Is.Not.Null);
+            }
+        }
+    }
+
+    // Legacy Database Testing
+    using NUnit.Framework.Internal.Filters;
+    public class LegacyDatabaseExample {
+        [Test]
+        public void TestOleDbConnection() {
+            using (OleDbConnection conn = new OleDbConnection("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=legacy.mdb"))
+            {
+                Assert.That(conn.State, Is.EqualTo(ConnectionState.Closed));
+                conn.Open();
+                Assert.That(conn.State, Is.EqualTo(ConnectionState.Open));
+            }
+        }
+    }
+
+    // ActiveX Control Testing
+    using NUnit.Framework.Internal.Builders;
+    public class ActiveXExample {
+        [Test]
+        public void TestActiveXControl() {
+            Type axType = Type.GetTypeFromProgID("MSComCtl2.MonthView");
+            Assert.That(axType, Is.Not.Null);
+            dynamic ctrl = Activator.CreateInstance(axType);
+            Assert.That(ctrl, Is.Not.Null);
+        }
+    }
+
+    // Legacy XML Testing
+    using NUnit.Framework.Interfaces;
+    public class LegacyXmlExample {
+        [Test]
+        public void TestXmlDataDocument() {
+            XmlDataDocument xmlDoc = new XmlDataDocument();
+            DataSet ds = new DataSet();
+            xmlDoc.DataSet = ds;
+            Assert.That(xmlDoc.DataSet, Is.SameAs(ds));
+        }
+    }
+}
