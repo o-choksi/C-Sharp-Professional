@@ -1,61 +1,86 @@
 using System;
 
-namespace OracleManagedDataAccessNamespaces
+namespace OracleDataAccessExamples
 {
-    // The following are commonly used Oracle.ManagedDataAccess namespaces:
-
-    // Namespace for managing Oracle connections, commands, and transactions in a fully managed environment.
+    // Basic database connectivity
     using Oracle.ManagedDataAccess.Client;
-    /* 
-     * Oracle.ManagedDataAccess.Client provides classes to interact with Oracle databases in a fully managed .NET environment.
-     * This includes OracleConnection, OracleCommand, OracleDataReader, and OracleTransaction for database operations.
-     * Since this is fully managed, it doesn't rely on Oracle client software installed on the machine.
-     */
+    public class ConnectionExample {
+        private readonly OracleConnection _connection = new OracleConnection();
+        public void ConfigureConnection() {
+            _connection.ConnectionString = "Data Source=ORCL;User Id=system;Password=password;";
+            _connection.Open();
+        }
+    }
 
-    // Namespace for handling Oracle-specific data types.
+    // Data reader operations
     using Oracle.ManagedDataAccess.Types;
-    /*
-     * Oracle.ManagedDataAccess.Types provides classes that represent Oracle-specific data types like 
-     * OracleDecimal, OracleString, OracleDate, OracleBlob, OracleClob, etc. 
-     * These classes allow the correct mapping between Oracle database fields and .NET types.
-     */
+    public class DataReaderExample {
+        private readonly OracleCommand _command = new OracleCommand();
+        public void ReadData(OracleConnection conn) {
+            _command.Connection = conn;
+            _command.CommandText = "SELECT * FROM employees";
+            using (OracleDataReader reader = _command.ExecuteReader()) {
+                while (reader.Read()) {
+                    Console.WriteLine(reader["employee_name"].ToString());
+                }
+            }
+        }
+    }
 
-    // Namespace for managing Oracle notifications such as database change notifications.
-    using Oracle.ManagedDataAccess.Notification;
-    /*
-     * Oracle.ManagedDataAccess.Notification provides support for Oracle Database Change Notifications (DCN).
-     * DCN allows applications to be notified when data in the Oracle database has changed.
-     * This namespace contains classes such as OracleNotificationRequest and OracleNotificationEventArgs.
-     */
+    // Parameter binding with array binding
+    using Oracle.ManagedDataAccess.Client;
+    public class ArrayBindingExample {
+        private readonly OracleCommand _command = new OracleCommand();
+        public void BindArrayParameters(OracleConnection conn) {
+            int[] empIds = { 1, 2, 3, 4, 5 };
+            _command.Connection = conn;
+            _command.ArrayBindCount = empIds.Length;
+            _command.CommandText = "UPDATE employees SET salary = salary + 100 WHERE employee_id = :id";
+            _command.Parameters.Add(":id", OracleDbType.Int32).Value = empIds;
+            _command.ExecuteNonQuery();
+        }
+    }
 
-    // Namespace for working with Oracle XML functionalities.
-    using Oracle.ManagedDataAccess.Xml;
-    /*
-     * Oracle.ManagedDataAccess.Xml provides support for working with XML data types and operations in Oracle databases.
-     * This is useful for storing, retrieving, and querying XML data in Oracle tables.
-     */
+    // Batch operations
+    using Oracle.ManagedDataAccess.Client;
+    public class BatchProcessingExample {
+        private readonly OracleCommand _command = new OracleCommand();
+        public void ExecuteBatch(OracleConnection conn) {
+            _command.Connection = conn;
+            _command.AddToStatementCache = true;
+            
+            _command.CommandText = "INSERT INTO departments (id, name) VALUES (:1, :2)";
+            _command.Parameters.Add(":1", OracleDbType.Int32);
+            _command.Parameters.Add(":2", OracleDbType.Varchar2);
+            
+            for (int i = 1; i <= 100; i++) {
+                _command.Parameters[0].Value = i;
+                _command.Parameters[1].Value = $"Department {i}";
+                _command.ExecuteNonQuery();
+            }
+        }
+    }
 
-    // Namespace for working with Oracle spatial data (e.g., geographic data).
-    using Oracle.ManagedDataAccess.Spatial;
-    /*
-     * Oracle.ManagedDataAccess.Spatial provides support for Oracle's Spatial Data Option.
-     * This namespace contains classes to handle spatial data types such as geometries (points, lines, polygons) 
-     * and perform spatial operations (queries, distance calculations).
-     */
-
-    // Namespace for working with Oracle distributed transactions.
-    using Oracle.ManagedDataAccess.DistributedTransaction;
-    /*
-     * Oracle.ManagedDataAccess.DistributedTransaction provides support for distributed transactions, 
-     * allowing you to manage transactions that span multiple Oracle databases or across different database systems.
-     * This is crucial for applications that need transactional consistency across multiple databases.
-     */
-
-    class Program
-    {
-        static void Main(string[] args)
-        {
-            Console.WriteLine("This file lists commonly used Oracle.ManagedDataAccess namespaces.");
+    // PL/SQL ref cursor
+    using Oracle.ManagedDataAccess.Client;
+    public class RefCursorExample {
+        private readonly OracleCommand _command = new OracleCommand();
+        public void FetchRefCursor(OracleConnection conn) {
+            _command.Connection = conn;
+            _command.CommandText = "BEGIN OPEN :result_cursor FOR SELECT * FROM employees; END;";
+            _command.CommandType = System.Data.CommandType.Text;
+            
+            OracleParameter resultCursor = new OracleParameter();
+            resultCursor.ParameterName = ":result_cursor";
+            resultCursor.OracleDbType = OracleDbType.RefCursor;
+            resultCursor.Direction = System.Data.ParameterDirection.Output;
+            _command.Parameters.Add(resultCursor);
+            
+            _command.ExecuteNonQuery();
+            OracleDataReader reader = ((OracleRefCursor)resultCursor.Value).GetDataReader();
+            while (reader.Read()) {
+                Console.WriteLine(reader["employee_name"].ToString());
+            }
         }
     }
 }

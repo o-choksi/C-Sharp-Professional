@@ -1,58 +1,106 @@
 using System;
 
-namespace OracleDataAccessNamespaces
+namespace OracleDataAccess
 {
-    // The following are commonly used Oracle.DataAccess namespaces:
-
-    // Namespace for working with Oracle database connections, commands, and transactions.
+    // Basic database connectivity
     using Oracle.DataAccess.Client;
-    /* 
-     * Oracle.DataAccess.Client provides classes for creating Oracle connections, executing SQL queries, 
-     * and handling transactions. It includes classes like OracleConnection, OracleCommand, and OracleDataReader.
-     */
+    public class ConnectionExample {
+        private readonly OracleConnection _connection = new OracleConnection();
+        public void ConfigureConnection() {
+            _connection.ConnectionString = "Data Source=ORCL;User Id=system;Password=password;";
+            _connection.Open();
+        }
+    }
 
-    // Namespace for working with Oracle data types.
+    // Command execution
+    using Oracle.DataAccess.CommandBuilder;
+    public class CommandExample {
+        private readonly OracleCommand _command = new OracleCommand();
+        public void ExecuteCommand() {
+            _command.CommandText = "SELECT * FROM employees";
+            _command.ExecuteNonQuery();
+        }
+    }
+
+    // Transaction management
+    using Oracle.DataAccess.Transaction;
+    public class TransactionExample {
+        private readonly OracleTransaction _transaction;
+        public void ManageTransaction(OracleConnection conn) {
+            _transaction = conn.BeginTransaction();
+            _transaction.Commit();
+        }
+    }
+
+    // Data type handling
     using Oracle.DataAccess.Types;
-    /*
-     * Oracle.DataAccess.Types provides classes that represent Oracle-specific data types like 
-     * OracleDecimal, OracleString, OracleDate, OracleBlob, OracleClob, etc.
-     * This namespace is crucial for handling Oracle database-specific data formats.
-     */
+    public class DataTypeExample {
+        private readonly OracleDecimal _decimal = new OracleDecimal();
+        public void HandleTypes() {
+            OracleDate date = OracleDate.GetSysDate();
+            OracleString str = new OracleString("Sample");
+        }
+    }
 
-    // Namespace for Oracle performance monitoring and optimization.
-    using Oracle.DataAccess.Performance;
-    /*
-     * Oracle.DataAccess.Performance provides classes to help with monitoring and optimizing 
-     * the performance of Oracle database interactions, such as through client-side caching.
-     */
+    // Bulk operations
+    using Oracle.DataAccess.Bulk;
+    public class BulkOperationsExample {
+        private readonly OracleBulkCopy _bulkCopy = new OracleBulkCopy();
+        public void PerformBulkCopy() {
+            _bulkCopy.DestinationTableName = "target_table";
+            _bulkCopy.BatchSize = 1000;
+        }
+    }
 
-    // Namespace for working with Oracle XML functionality.
-    using Oracle.DataAccess.Xml;
-    /*
-     * Oracle.DataAccess.Xml provides support for working with XML data types and XML-related operations 
-     * in Oracle databases. This includes XML parsing and storage within Oracle databases.
-     */
+    // XML data handling
+    using Oracle.DataAccess.XML;
+    public class XmlExample {
+        private readonly OracleXmlType _xml = new OracleXmlType();
+        public void ProcessXml(OracleConnection conn) {
+            _xml.Stream = new System.IO.MemoryStream();
+            _xml.Save();
+        }
+    }
 
-    // Namespace for managing Oracle distributed transactions.
-    using Oracle.DataAccess.DistributedTransaction;
-    /*
-     * Oracle.DataAccess.DistributedTransaction provides support for handling distributed transactions 
-     * across multiple databases or different types of databases using Oracle Transaction Coordinator.
-     */
+    // LOB handling
+    using Oracle.DataAccess.LOB;
+    public class LobExample {
+        private readonly OracleLob _lob;
+        public void ManageLob(OracleConnection conn) {
+            OracleClob clob = new OracleClob(conn);
+            clob.Write(new byte[] { }, 0, 0);
+        }
+    }
 
-    // Namespace for working with Oracle connection pools and caching.
-    using Oracle.DataAccess.ConnectionPooling;
-    /*
-     * Oracle.DataAccess.ConnectionPooling provides classes for managing Oracle connection pooling, 
-     * improving the performance of database interactions by reusing active connections rather than 
-     * constantly opening and closing new ones.
-     */
-    
-    class Program
-    {
-        static void Main(string[] args)
-        {
-            Console.WriteLine("This file lists commonly used Oracle.DataAccess namespaces.");
+    // Parameter binding
+    using Oracle.DataAccess.Parameters;
+    public class ParameterExample {
+        private readonly OracleParameter _param = new OracleParameter();
+        public void ConfigureParameter() {
+            _param.ParameterName = "p_employee_id";
+            _param.OracleDbType = OracleDbType.Int32;
+        }
+    }
+
+    // Database change notification
+    using Oracle.DataAccess.Notification;
+    public class NotificationExample {
+        private readonly OracleChangeNotification _notification = new OracleChangeNotification();
+        public void SetupNotification() {
+            _notification.RegisterQuery("SELECT * FROM employees");
+            _notification.OnChange += (sender, args) => {
+                Console.WriteLine("Data changed!");
+            };
+        }
+    }
+
+    // Distributed transactions
+    using Oracle.DataAccess.DTC;
+    public class DistributedTransactionExample {
+        private readonly OracleDistributedTransaction _dtc;
+        public void ManageDistributedTx(OracleConnection conn) {
+            _dtc = conn.EnlistDistributedTransaction();
+            _dtc.Prepare();
         }
     }
 }
