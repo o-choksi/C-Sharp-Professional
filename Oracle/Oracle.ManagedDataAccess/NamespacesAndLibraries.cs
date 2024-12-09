@@ -1,6 +1,6 @@
 using System;
 
-namespace OracleDataAccessExamples
+namespace OracleManagedDataAccess
 {
     // Basic database connectivity
     using Oracle.ManagedDataAccess.Client;

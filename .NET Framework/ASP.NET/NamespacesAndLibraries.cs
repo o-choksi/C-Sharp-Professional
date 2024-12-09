@@ -1,5 +1,3 @@
-// This file provides an overview of commonly used ASP.NET namespaces and libraries
-
 using System;
 
 namespace AspNet

@@ -1,89 +1,187 @@
 using System;
 
-namespace TelerikNamespaceExample
+namespace Telerik
 {
-    // Core Telerik namespaces for different platforms
-
-    // Core Telerik UI helpers for ASP.NET MVC
-    using Telerik.Web.Mvc;
-    // Provides the basic classes and extensions for ASP.NET MVC applications. 
-    // It helps in rendering UI components like grids, charts, and forms.
-
-    // UI controls for Telerik ASP.NET MVC components
-    using Telerik.Web.Mvc.UI;
-    // This namespace includes the classes needed to render UI components like
-    // Grid, Chart, DropDownList, DatePicker, etc.
-
-    // Internal services for Telerik infrastructure
-    using Telerik.Web.Mvc.Infrastructure;
-    // Provides infrastructure-related features for AJAX data binding, validation,
-    // and rendering of Telerik components in ASP.NET MVC.
-
-    // Extension methods for Telerik MVC components
-    using Telerik.Web.Mvc.Extensions;
-    // Contains extension methods that enhance existing Telerik UI components 
-    // with additional functionality such as AJAX support, event handling, etc.
-
-    // ASP.NET Web Forms UI controls (RadGrid, RadComboBox, RadTreeView)
+    // Grid Component
     using Telerik.Web.UI;
-    // This namespace is specifically for Web Forms projects and contains the
-    // implementation of RadControls like RadGrid, RadComboBox, RadTreeView, and more.
+    public class GridExample {
+        private readonly RadGrid _grid = new RadGrid();
+        public void ConfigureGrid() {
+            _grid.AllowPaging = true;
+            _grid.PageSize = 10;
+            _grid.AllowSorting = true;
+            _grid.DataSource = GetDataSource();
+            _grid.DataBind();
+        }
+    }
 
-    // Base classes for Telerik UI for WinForms
-    using Telerik.WinControls;
-    // Contains fundamental classes, interfaces, and utilities needed for the 
-    // construction of Telerik WinForms components like grids, charts, and buttons.
+    // Chart Visualization
+    using Telerik.Charting;
+    public class ChartExample {
+        private readonly RadChart _chart;
+        public void CreateChart() {
+            _chart = new RadChart();
+            _chart.ChartTitle.Text = "Sales Report";
+            _chart.AddSeries(new ChartSeries("Monthly Sales"));
+            _chart.DataBind();
+        }
+    }
 
-    // Telerik UI controls for WinForms applications
-    using Telerik.WinControls.UI;
-    // Provides the actual implementation of UI components like RadGridView, 
-    // RadChart, RadTreeView, and other common controls for WinForms applications.
+    // Scheduler Component
+    using Telerik.Web.UI.Calendar;
+    public class SchedulerExample {
+        private readonly RadScheduler _scheduler;
+        public void ConfigureScheduler() {
+            _scheduler = new RadScheduler();
+            _scheduler.SelectedView = SchedulerViewType.WeekView;
+            _scheduler.DayStartTime = "08:00";
+            _scheduler.DayEndTime = "18:00";
+        }
+    }
 
-    // Reporting system in Telerik
+    // Editor Control
+    using Telerik.Web.UI.Editor;
+    public class EditorExample {
+        private readonly RadEditor _editor;
+        public void SetupEditor() {
+            _editor = new RadEditor();
+            _editor.Content = "Initial content";
+            _editor.ToolsFile = "~/EditorTools.xml";
+            _editor.EnableResize = true;
+        }
+    }
+
+    // Upload Component
+    using Telerik.Web.UI.Upload;
+    public class UploadExample {
+        private readonly RadUpload _upload;
+        public void ConfigureUpload() {
+            _upload = new RadUpload();
+            _upload.AllowedFileExtensions = ".pdf,.doc,.docx";
+            _upload.MaxFileSize = 10485760; // 10MB
+            _upload.MultipleFileSelection = true;
+        }
+    }
+
+    // Menu Navigation
+    using Telerik.Web.UI.Navigation;
+    public class MenuExample {
+        private readonly RadMenu _menu;
+        public void CreateMenu() {
+            _menu = new RadMenu();
+            _menu.EnableRoundedCorners = true;
+            _menu.EnableScreenBoundaryDetection = true;
+            _menu.LoadXmlFile("~/Menu.xml");
+        }
+    }
+
+    // Window Management
+    using Telerik.Web.UI.Windows;
+    public class WindowExample {
+        private readonly RadWindow _window;
+        public void ShowWindow() {
+            _window = new RadWindow();
+            _window.Title = "Dialog Window";
+            _window.Width = 500;
+            _window.Height = 300;
+            _window.Modal = true;
+        }
+    }
+
+    // PDF Processing
+    using Telerik.Windows.Documents.Fixed;
+    public class PdfExample {
+        private readonly RadFixedDocument _document;
+        public void CreatePdf() {
+            _document = new RadFixedDocument();
+            RadFixedPage page = _document.Pages.AddPage();
+            page.Size = new Size(792, 612); // Letter size
+            _document.Save("output.pdf");
+        }
+    }
+
+    // Spreadsheet Processing
+    using Telerik.Windows.Documents.Spreadsheet;
+    public class SpreadsheetExample {
+        private readonly Workbook _workbook;
+        public void ManageSpreadsheet() {
+            _workbook = new Workbook();
+            Worksheet sheet = _workbook.Worksheets.Add();
+            sheet.Cells[0, 0].SetValue("Hello World");
+            _workbook.Save("output.xlsx");
+        }
+    }
+
+    // Report Processing
     using Telerik.Reporting;
-    // Provides classes and methods for creating, configuring, and rendering reports 
-    // within Telerik Reporting, including data sources and report definitions.
+    public class ReportExample {
+        private readonly Report _report;
+        public void GenerateReport() {
+            _report = new Report();
+            ReportParameter param = new ReportParameter();
+            param.Name = "DateRange";
+            _report.ReportParameters.Add(param);
+            _report.Export(new PdfReportProcessor());
+        }
+    }
 
-    // Reporting processing and rendering for Telerik
-    using Telerik.Reporting.Processing;
-    // Includes classes for managing and processing reports, such as rendering them 
-    // in different formats (PDF, Word, Excel).
+    // Data Access
+    using Telerik.Data.Core;
+    public class DataAccessExample {
+        private readonly DataSourceBuilder _builder;
+        public void ConfigureDataAccess() {
+            _builder = new DataSourceBuilder();
+            _builder.AddSort("Name", ListSortDirection.Ascending);
+            _builder.AddFilter("Age", FilterOperator.IsGreaterThan, 18);
+        }
+    }
 
-    // Telerik UI for WPF base controls
-    using Telerik.Windows.Controls;
-    // Provides controls for WPF applications such as grids, charts, calendars, 
-    // and other components needed to build rich WPF applications.
+    // Image Processing
+    using Telerik.Windows.Media.Imaging;
+    public class ImageExample {
+        private readonly RadBitmapImage _image;
+        public void ProcessImage() {
+            _image = new RadBitmapImage();
+            _image.Load("input.jpg");
+            _image.Resize(800, 600);
+            _image.Save("output.jpg");
+        }
+    }
 
-    // GridView control for WPF
-    using Telerik.Windows.Controls.GridView;
-    // Contains classes and utilities to work with RadGridView in WPF. 
-    // It includes support for row/column customization, filtering, sorting, etc.
+    // Map Visualization
+    using Telerik.Web.UI.Map;
+    public class MapExample {
+        private readonly RadMap _map;
+        public void ConfigureMap() {
+            _map = new RadMap();
+            _map.Zoom = 4;
+            _map.Center = new MapPoint(40.7128, -74.0060);
+            _map.EnableMouseWheelZoom = true;
+        }
+    }
 
-    // Charting control for WPF applications
-    using Telerik.Windows.Controls.Charting;
-    // This namespace contains classes to work with charting components in WPF 
-    // applications, including line charts, bar charts, and pie charts.
+    // Gauge Control
+    using Telerik.Web.UI.Gauges;
+    public class GaugeExample {
+        private readonly RadRadialGauge _gauge;
+        public void SetupGauge() {
+            _gauge = new RadRadialGauge();
+            _gauge.MinValue = 0;
+            _gauge.MaxValue = 100;
+            _gauge.Value = 75;
+            _gauge.ShowLabels = true;
+        }
+    }
 
-    // Drawing utilities for Telerik Reporting
-    using Telerik.Reporting.Drawing;
-    // Includes drawing and layout functionalities for Telerik Reporting.
-    // Used to style reports with fonts, colors, and layouts.
-
-    // Charting utilities for Telerik Reporting
-    using Telerik.Reporting.Charting;
-    // Contains classes needed to add and customize charts in Telerik Reports, 
-    // helping to visualize data with various chart types like bar, line, and pie charts.
-
-    // Fluent API for Telerik UI configuration in ASP.NET MVC
-    using Telerik.Web.Mvc.Fluent;
-    // Provides a fluent API for configuring Telerik UI components in ASP.NET MVC. 
-    // It allows method chaining to simplify the configuration of components.
-
-    class Program
-    {
-        static void Main(string[] args)
-        {
-            Console.WriteLine("Telerik Namespace Example!");
+    // Barcode Generation
+    using Telerik.Web.UI.Barcode;
+    public class BarcodeExample {
+        private readonly RadBarcode _barcode;
+        public void GenerateBarcode() {
+            _barcode = new RadBarcode();
+            _barcode.Type = BarcodeType.QRCode;
+            _barcode.Text = "https://www.telerik.com";
+            _barcode.Width = 200;
         }
     }
 }
