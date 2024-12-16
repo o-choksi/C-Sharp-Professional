@@ -2,101 +2,134 @@ using System;
 
 namespace AspNet
 {
-    // Core ASP.NET MVC functionality
-    using Microsoft.AspNetCore.Mvc;
-    public class HomeController : Controller {
-        public IActionResult Index() => View();
+    // Classic ASP.NET Web Forms
+    using System.Web.UI;
+    public class HomePage : Page {
+        protected void Page_Load(object sender, EventArgs e) {
+            Response.Write("Hello World");
+        }
     }
 
-    // HTTP request/response handling 
-    using Microsoft.AspNetCore.Http;
-    public void ProcessRequest(HttpContext context) {
-        context.Response.WriteAsync("Hello World");
+    // HTTP Handling
+    using System.Web;
+    public class HttpHandler : IHttpHandler {
+        public void ProcessRequest(HttpContext context) {
+            context.Response.Write("Hello World");
+        }
+        public bool IsReusable => false;
     }
 
-    // Dependency injection
-    using Microsoft.Extensions.DependencyInjection;
-    public void ConfigureServices(IServiceCollection services) {
-        services.AddScoped<IMyService, MyService>();
+    // Classic ASP.NET Services
+    using System.Web.Services;
+    [WebService(Namespace = "http://tempuri.org/")]
+    public class LegacyWebService : WebService {
+        [WebMethod]
+        public string HelloWorld() => "Hello World";
     }
 
-    // Entity Framework Core
-    using Microsoft.EntityFrameworkCore;
-    public class BlogContext : DbContext {
-        public DbSet<Blog> Blogs { get; set; }
+    // Classic ADO.NET
+    using System.Data;
+    using System.Data.SqlClient;
+    public class DataAccess {
+        public DataSet GetData() {
+            using(var conn = new SqlConnection("connection_string")) {
+                var cmd = new SqlCommand("SELECT * FROM Table", conn);
+                var adapter = new SqlDataAdapter(cmd);
+                var ds = new DataSet();
+                adapter.Fill(ds);
+                return ds;
+            }
+        }
     }
 
-    // Authentication and user management
-    using Microsoft.AspNetCore.Identity;
+    // ASP.NET Membership
+    using System.Web.Security;
     public class UserManager {
-        private readonly UserManager<IdentityUser> _userManager;
-        public async Task CreateUser(string email) =>
-            await _userManager.CreateAsync(new IdentityUser(email));
+        public bool ValidateUser(string username, string password) {
+            return Membership.ValidateUser(username, password);
+        }
     }
 
-    // Logging
-    using Microsoft.Extensions.Logging;
-    public class LoggingExample {
-        private readonly ILogger _logger;
-        public void Log() => _logger.LogInformation("Log message");
+    // ASP.NET Tracing
+    using System.Web;
+    public class TracingExample {
+        public void TraceMessage() {
+            HttpContext.Current.Trace.Write("Category", "Message");
+        }
     }
 
-    // Authorization
-    using Microsoft.AspNetCore.Authorization;
-    [Authorize(Roles = "Admin")]
-    public class AdminController : Controller {
-        public IActionResult SecureEndpoint() => Ok();
+    // Forms Authentication
+    using System.Web.Security;
+    public class AuthExample {
+        public void Authenticate(string username) {
+            FormsAuthentication.SetAuthCookie(username, false);
+        }
     }
 
-    // Real-time communication
-    using Microsoft.AspNetCore.SignalR;
-    public class ChatHub : Hub {
-        public async Task SendMessage(string message) =>
-            await Clients.All.SendAsync("ReceiveMessage", message);
+    // ASP.NET Caching
+    using System.Web.Caching;
+    public class CacheExample {
+        public void SetCache() {
+            HttpContext.Current.Cache.Insert(
+                "key", 
+                "value",
+                null,
+                DateTime.Now.AddMinutes(30),
+                Cache.NoSlidingExpiration
+            );
+        }
     }
 
     // Configuration
-    using Microsoft.Extensions.Configuration;
+    using System.Configuration;
     public class ConfigExample {
-        public string GetSetting(IConfiguration config) =>
-            config.GetValue<string>("AppSettings:Key");
+        public string GetSetting() {
+            return ConfigurationManager.AppSettings["Key"];
+        }
     }
 
-    // Hosting and startup
-    using Microsoft.AspNetCore.Hosting;
-    public class Program {
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder => {
-                    webBuilder.UseStartup<Startup>();
-                });
+    // ASP.NET Application State
+    using System.Web;
+    public class StateExample {
+        public void SetGlobalState() {
+            HttpContext.Current.Application["GlobalKey"] = "Value";
+        }
     }
 
-    // Static file handling
-    using Microsoft.AspNetCore.StaticFiles;
-    public void ConfigureStaticFiles(IApplicationBuilder app) {
-        app.UseStaticFiles();
+    // ASP.NET File Handling
+    using System.Web;
+    public class FileExample {
+        public void HandleUpload() {
+            HttpPostedFile file = HttpContext.Current.Request.Files[0];
+            file.SaveAs(@"C:\uploads\file.txt");
+        }
     }
 
-    // Session management
-    using Microsoft.AspNetCore.Session;
-    public void UseSessionExample(HttpContext context) {
-        context.Session.SetString("UserKey", "UserValue");
+    // Classic ASP.NET Session
+    using System.Web.SessionState;
+    public class SessionExample {
+        public void UseSession() {
+            HttpContext.Current.Session["UserKey"] = "UserValue";
+        }
     }
 
-    // HTTP client
-    using System.Net.Http;
-    public class ApiClient {
-        private readonly HttpClient _client = new HttpClient();
-        public async Task<string> GetData() =>
-            await _client.GetStringAsync("https://api.example.com/data");
+    // ASP.NET Web Client
+    using System.Net;
+    public class WebClientExample {
+        private readonly WebClient _client = new WebClient();
+        public string GetData() {
+            return _client.DownloadString("http://api.example.com/data");
+        }
     }
 
-    // Routing
-    using Microsoft.AspNetCore.Routing;
-    public void ConfigureRoutes(IEndpointRouteBuilder endpoints) {
-        endpoints.MapControllerRoute(
-            name: "default",
-            pattern: "{controller=Home}/{action=Index}/{id?}");
+    // URL Routing (Pre-MVC)
+    using System.Web.Routing;
+    public class RoutingExample {
+        public void RegisterRoutes(RouteCollection routes) {
+            routes.Add(new Route(
+                "{controller}/{action}",
+                new PageRouteHandler("~/Default.aspx")
+            ));
+        }
     }
 } 
