@@ -4,9 +4,11 @@ namespace OracleManagedDataAccess
 {
     // Basic database connectivity
     using Oracle.ManagedDataAccess.Client;
-    public class ConnectionExample {
+    public class ConnectionExample 
+    {
         private readonly OracleConnection _connection = new OracleConnection();
-        public void ConfigureConnection() {
+        public void ConfigureConnection() 
+        {
             _connection.ConnectionString = "Data Source=ORCL;User Id=system;Password=password;";
             _connection.Open();
         }
@@ -14,13 +16,17 @@ namespace OracleManagedDataAccess
 
     // Data reader operations
     using Oracle.ManagedDataAccess.Types;
-    public class DataReaderExample {
+    public class DataReaderExample 
+    {
         private readonly OracleCommand _command = new OracleCommand();
-        public void ReadData(OracleConnection conn) {
+        public void ReadData(OracleConnection conn) 
+        {
             _command.Connection = conn;
             _command.CommandText = "SELECT * FROM employees";
-            using (OracleDataReader reader = _command.ExecuteReader()) {
-                while (reader.Read()) {
+            using (OracleDataReader reader = _command.ExecuteReader()) 
+            {
+                while (reader.Read()) 
+                {
                     Console.WriteLine(reader["employee_name"].ToString());
                 }
             }
@@ -29,9 +35,11 @@ namespace OracleManagedDataAccess
 
     // Parameter binding with array binding
     using Oracle.ManagedDataAccess.Client;
-    public class ArrayBindingExample {
+    public class ArrayBindingExample 
+    {
         private readonly OracleCommand _command = new OracleCommand();
-        public void BindArrayParameters(OracleConnection conn) {
+        public void BindArrayParameters(OracleConnection conn) 
+        {
             int[] empIds = { 1, 2, 3, 4, 5 };
             _command.Connection = conn;
             _command.ArrayBindCount = empIds.Length;
@@ -43,9 +51,11 @@ namespace OracleManagedDataAccess
 
     // Batch operations
     using Oracle.ManagedDataAccess.Client;
-    public class BatchProcessingExample {
+    public class BatchProcessingExample 
+    {
         private readonly OracleCommand _command = new OracleCommand();
-        public void ExecuteBatch(OracleConnection conn) {
+        public void ExecuteBatch(OracleConnection conn) 
+        {
             _command.Connection = conn;
             _command.AddToStatementCache = true;
             
@@ -53,7 +63,8 @@ namespace OracleManagedDataAccess
             _command.Parameters.Add(":1", OracleDbType.Int32);
             _command.Parameters.Add(":2", OracleDbType.Varchar2);
             
-            for (int i = 1; i <= 100; i++) {
+            for (int i = 1; i <= 100; i++) 
+            {
                 _command.Parameters[0].Value = i;
                 _command.Parameters[1].Value = $"Department {i}";
                 _command.ExecuteNonQuery();
@@ -63,9 +74,11 @@ namespace OracleManagedDataAccess
 
     // PL/SQL ref cursor
     using Oracle.ManagedDataAccess.Client;
-    public class RefCursorExample {
+    public class RefCursorExample 
+    {
         private readonly OracleCommand _command = new OracleCommand();
-        public void FetchRefCursor(OracleConnection conn) {
+        public void FetchRefCursor(OracleConnection conn) 
+        {
             _command.Connection = conn;
             _command.CommandText = "BEGIN OPEN :result_cursor FOR SELECT * FROM employees; END;";
             _command.CommandType = System.Data.CommandType.Text;
@@ -78,7 +91,8 @@ namespace OracleManagedDataAccess
             
             _command.ExecuteNonQuery();
             OracleDataReader reader = ((OracleRefCursor)resultCursor.Value).GetDataReader();
-            while (reader.Read()) {
+            while (reader.Read()) 
+            {
                 Console.WriteLine(reader["employee_name"].ToString());
             }
         }

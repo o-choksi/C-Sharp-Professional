@@ -4,9 +4,11 @@ namespace Telerik
 {
     // Grid Component
     using Telerik.Web.UI;
-    public class GridExample {
+    public class GridExample 
+    {
         private readonly RadGrid _grid = new RadGrid();
-        public void ConfigureGrid() {
+        public void ConfigureGrid() 
+        {
             _grid.AllowPaging = true;
             _grid.PageSize = 10;
             _grid.AllowSorting = true;
@@ -17,9 +19,11 @@ namespace Telerik
 
     // Chart Visualization
     using Telerik.Charting;
-    public class ChartExample {
+    public class ChartExample 
+    {
         private readonly RadChart _chart;
-        public void CreateChart() {
+        public void CreateChart() 
+        {
             _chart = new RadChart();
             _chart.ChartTitle.Text = "Sales Report";
             _chart.AddSeries(new ChartSeries("Monthly Sales"));
@@ -29,9 +33,11 @@ namespace Telerik
 
     // Scheduler Component
     using Telerik.Web.UI.Calendar;
-    public class SchedulerExample {
+    public class SchedulerExample 
+    {
         private readonly RadScheduler _scheduler;
-        public void ConfigureScheduler() {
+        public void ConfigureScheduler() 
+        {
             _scheduler = new RadScheduler();
             _scheduler.SelectedView = SchedulerViewType.WeekView;
             _scheduler.DayStartTime = "08:00";
@@ -41,9 +47,11 @@ namespace Telerik
 
     // Editor Control
     using Telerik.Web.UI.Editor;
-    public class EditorExample {
+    public class EditorExample 
+    {
         private readonly RadEditor _editor;
-        public void SetupEditor() {
+        public void SetupEditor() 
+        {
             _editor = new RadEditor();
             _editor.Content = "Initial content";
             _editor.ToolsFile = "~/EditorTools.xml";
@@ -53,9 +61,11 @@ namespace Telerik
 
     // Upload Component
     using Telerik.Web.UI.Upload;
-    public class UploadExample {
+    public class UploadExample 
+    {
         private readonly RadUpload _upload;
-        public void ConfigureUpload() {
+        public void ConfigureUpload() 
+        {
             _upload = new RadUpload();
             _upload.AllowedFileExtensions = ".pdf,.doc,.docx";
             _upload.MaxFileSize = 10485760; // 10MB
@@ -65,9 +75,11 @@ namespace Telerik
 
     // Menu Navigation
     using Telerik.Web.UI.Navigation;
-    public class MenuExample {
+    public class MenuExample 
+    {
         private readonly RadMenu _menu;
-        public void CreateMenu() {
+        public void CreateMenu() 
+        {
             _menu = new RadMenu();
             _menu.EnableRoundedCorners = true;
             _menu.EnableScreenBoundaryDetection = true;
@@ -77,9 +89,11 @@ namespace Telerik
 
     // Window Management
     using Telerik.Web.UI.Windows;
-    public class WindowExample {
+    public class WindowExample 
+    {
         private readonly RadWindow _window;
-        public void ShowWindow() {
+        public void ShowWindow() 
+        {
             _window = new RadWindow();
             _window.Title = "Dialog Window";
             _window.Width = 500;
@@ -90,9 +104,11 @@ namespace Telerik
 
     // PDF Processing
     using Telerik.Windows.Documents.Fixed;
-    public class PdfExample {
+    public class PdfExample 
+    {
         private readonly RadFixedDocument _document;
-        public void CreatePdf() {
+        public void CreatePdf() 
+        {
             _document = new RadFixedDocument();
             RadFixedPage page = _document.Pages.AddPage();
             page.Size = new Size(792, 612); // Letter size
@@ -102,9 +118,11 @@ namespace Telerik
 
     // Spreadsheet Processing
     using Telerik.Windows.Documents.Spreadsheet;
-    public class SpreadsheetExample {
+    public class SpreadsheetExample 
+    {
         private readonly Workbook _workbook;
-        public void ManageSpreadsheet() {
+        public void ManageSpreadsheet() 
+        {
             _workbook = new Workbook();
             Worksheet sheet = _workbook.Worksheets.Add();
             sheet.Cells[0, 0].SetValue("Hello World");
@@ -114,9 +132,11 @@ namespace Telerik
 
     // Report Processing
     using Telerik.Reporting;
-    public class ReportExample {
+    public class ReportExample 
+    {
         private readonly Report _report;
-        public void GenerateReport() {
+        public void GenerateReport() 
+        {
             _report = new Report();
             ReportParameter param = new ReportParameter();
             param.Name = "DateRange";
@@ -127,9 +147,11 @@ namespace Telerik
 
     // Data Access
     using Telerik.Data.Core;
-    public class DataAccessExample {
+    public class DataAccessExample 
+    {
         private readonly DataSourceBuilder _builder;
-        public void ConfigureDataAccess() {
+        public void ConfigureDataAccess() 
+        {
             _builder = new DataSourceBuilder();
             _builder.AddSort("Name", ListSortDirection.Ascending);
             _builder.AddFilter("Age", FilterOperator.IsGreaterThan, 18);
@@ -138,9 +160,11 @@ namespace Telerik
 
     // Image Processing
     using Telerik.Windows.Media.Imaging;
-    public class ImageExample {
+    public class ImageExample 
+    {
         private readonly RadBitmapImage _image;
-        public void ProcessImage() {
+        public void ProcessImage() 
+        {
             _image = new RadBitmapImage();
             _image.Load("input.jpg");
             _image.Resize(800, 600);
@@ -150,9 +174,11 @@ namespace Telerik
 
     // Map Visualization
     using Telerik.Web.UI.Map;
-    public class MapExample {
+    public class MapExample 
+    {
         private readonly RadMap _map;
-        public void ConfigureMap() {
+        public void ConfigureMap() 
+        {
             _map = new RadMap();
             _map.Zoom = 4;
             _map.Center = new MapPoint(40.7128, -74.0060);
@@ -162,9 +188,11 @@ namespace Telerik
 
     // Gauge Control
     using Telerik.Web.UI.Gauges;
-    public class GaugeExample {
+    public class GaugeExample 
+    {
         private readonly RadRadialGauge _gauge;
-        public void SetupGauge() {
+        public void SetupGauge() 
+        {
             _gauge = new RadRadialGauge();
             _gauge.MinValue = 0;
             _gauge.MaxValue = 100;
@@ -175,9 +203,11 @@ namespace Telerik
 
     // Barcode Generation
     using Telerik.Web.UI.Barcode;
-    public class BarcodeExample {
+    public class BarcodeExample 
+    {
         private readonly RadBarcode _barcode;
-        public void GenerateBarcode() {
+        public void GenerateBarcode() 
+        {
             _barcode = new RadBarcode();
             _barcode.Type = BarcodeType.QRCode;
             _barcode.Text = "https://www.telerik.com";

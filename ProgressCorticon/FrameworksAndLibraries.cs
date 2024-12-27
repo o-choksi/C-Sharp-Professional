@@ -4,9 +4,11 @@ namespace ProgressCorticon
 {
     // Rule Engine Configuration
     using Progress.Corticon.Runtime;
-    public class RuleEngineExample {
+    public class RuleEngineExample 
+    {
         private readonly ICcServer _ruleEngine = new CcServerFactory().CreateCcServer();
-        public void ConfigureRuleEngine() {
+        public void ConfigureRuleEngine() 
+        {
             _ruleEngine.AutoUpdateDatabase = true;
             _ruleEngine.LoadRulesheet("PolicyRules.ers");
         }
@@ -14,12 +16,15 @@ namespace ProgressCorticon
 
     // Decision Service Execution
     using Progress.Corticon.Runtime.Messages;
-    public class DecisionServiceExample {
+    public class DecisionServiceExample 
+    {
         private readonly ICcServer _ruleEngine;
-        public void ExecuteRules(string payload) {
+        public void ExecuteRules(string payload) 
+        {
             ICcDataObject inputData = CcDataFactory.CreateCcDataObject(payload);
             ICcResponse response = _ruleEngine.Execute(inputData);
-            foreach(Message msg in response.Messages) {
+            foreach(Message msg in response.Messages) 
+            {
                 Console.WriteLine($"{msg.Severity}: {msg.Text}");
             }
         }
@@ -27,11 +32,14 @@ namespace ProgressCorticon
 
     // Vocabulary Management
     using Progress.Corticon.Runtime.Vocabulary;
-    public class VocabularyExample {
+    public class VocabularyExample 
+    {
         private readonly ICcVocabulary _vocabulary;
-        public void LoadVocabulary() {
+        public void LoadVocabulary() 
+        {
             _vocabulary = CcVocabularyFactory.CreateVocabulary("Business.ecore");
-            foreach(ICcEntity entity in _vocabulary.Entities) {
+            foreach(ICcEntity entity in _vocabulary.Entities) 
+            {
                 Console.WriteLine($"Entity: {entity.Name}");
             }
         }
@@ -39,9 +47,11 @@ namespace ProgressCorticon
 
     // Rule Flow Management
     using Progress.Corticon.Runtime.Flow;
-    public class RuleFlowExample {
+    public class RuleFlowExample 
+    {
         private readonly ICcRuleFlow _ruleFlow;
-        public void ExecuteRuleFlow() {
+        public void ExecuteRuleFlow() 
+        {
             _ruleFlow = CcRuleFlowFactory.CreateRuleFlow("CustomerFlow.erf");
             _ruleFlow.Execute();
             ICcFlowResult results = _ruleFlow.GetResults();
@@ -50,11 +60,14 @@ namespace ProgressCorticon
 
     // Entity Validation
     using Progress.Corticon.Runtime.Validation;
-    public class ValidationExample {
+    public class ValidationExample 
+    {
         private readonly ICcValidator _validator;
-        public void ValidateEntities(ICcEntity entity) {
+        public void ValidateEntities(ICcEntity entity) 
+        {
             ValidationResults results = _validator.Validate(entity);
-            foreach(ValidationError error in results.Errors) {
+            foreach(ValidationError error in results.Errors) 
+            {
                 Console.WriteLine($"Error: {error.Message}");
             }
         }
@@ -62,9 +75,11 @@ namespace ProgressCorticon
 
     // Rule Testing
     using Progress.Corticon.Runtime.Test;
-    public class RuleTestExample {
+    public class RuleTestExample 
+    {
         private readonly ICcTestSuite _testSuite;
-        public void RunTests() {
+        public void RunTests() 
+        {
             _testSuite = CcTestFactory.CreateTestSuite("BusinessRules.ert");
             TestResults results = _testSuite.ExecuteTests();
             Console.WriteLine($"Passed: {results.PassedTests}, Failed: {results.FailedTests}");
@@ -73,9 +88,11 @@ namespace ProgressCorticon
 
     // Decision Service Deployment
     using Progress.Corticon.Runtime.Deploy;
-    public class DeploymentExample {
+    public class DeploymentExample 
+    {
         private readonly ICcDeployment _deployment;
-        public void DeployRules() {
+        public void DeployRules() 
+        {
             _deployment = CcDeploymentFactory.CreateDeployment();
             _deployment.AddRulesheet("PolicyRules.ers");
             _deployment.Deploy("ProductionServer");
@@ -84,9 +101,11 @@ namespace ProgressCorticon
 
     // Performance Monitoring
     using Progress.Corticon.Runtime.Metrics;
-    public class MetricsExample {
+    public class MetricsExample 
+    {
         private readonly ICcMetrics _metrics;
-        public void TrackPerformance() {
+        public void TrackPerformance() 
+        {
             _metrics = CcMetricsFactory.CreateMetrics();
             _metrics.StartTracking();
             // Execute rules
@@ -97,9 +116,11 @@ namespace ProgressCorticon
 
     // Rule Version Control
     using Progress.Corticon.Runtime.Version;
-    public class VersionControlExample {
+    public class VersionControlExample 
+    {
         private readonly ICcVersionControl _versionControl;
-        public void ManageVersions() {
+        public void ManageVersions() 
+        {
             _versionControl = CcVersionFactory.CreateVersionControl();
             _versionControl.CheckoutRules("BusinessRules");
             _versionControl.CommitChanges("Updated policy rules");
@@ -108,13 +129,13 @@ namespace ProgressCorticon
 
     // Event Handling
     using Progress.Corticon.Runtime.Events;
-    public class EventHandlingExample {
+    public class EventHandlingExample 
+    {
         private readonly ICcEventManager _eventManager;
-        public void HandleEvents() {
+        public void HandleEvents() 
+        {
             _eventManager = CcEventFactory.CreateEventManager();
-            _eventManager.Subscribe(EventType.RuleExecution, (sender, e) => {
-                Console.WriteLine($"Rule executed: {e.RuleName}");
-            });
+            _eventManager.Subscribe(EventType.RuleExecution, (sender, e) => {Console.WriteLine($"Rule executed: {e.RuleName}");});
         }
     }
 }
