@@ -4,9 +4,11 @@ namespace KeyotiRapidSpell
 {
     // Core RapidSpell functionality
     using Keyoti.RapidSpell;
-    public class SpellCheckerExample {
+    public class SpellCheckerExample 
+    {
         private readonly RapidSpellAsYouType _spellChecker = new RapidSpellAsYouType();
-        public void ConfigureSpellChecker() {
+        public void ConfigureSpellChecker() 
+        {
             _spellChecker.CheckAsYouType = true;
             _spellChecker.ShowDialog = true;
         }
@@ -14,9 +16,11 @@ namespace KeyotiRapidSpell
 
     // Dictionary management
     using Keyoti.RapidSpell.Dictionaries;
-    public class DictionaryExample {
+    public class DictionaryExample 
+    {
         private readonly WordDictionary _dictionary = new WordDictionary();
-        public void LoadDictionary() {
+        public void LoadDictionary() 
+        {
             _dictionary.LoadDictionary("en-US.dic");
             _dictionary.AddWord("CustomWord");
         }
@@ -24,9 +28,11 @@ namespace KeyotiRapidSpell
 
     // Spell checking options
     using Keyoti.RapidSpell.SpellChecking;
-    public class SpellCheckOptionsExample {
+    public class SpellCheckOptionsExample 
+    {
         private readonly SpellCheckOptions _options = new SpellCheckOptions();
-        public void ConfigureOptions() {
+        public void ConfigureOptions() 
+        {
             _options.IgnoreAllCaps = true;
             _options.IgnoreNumbers = true;
             _options.SuggestionsMethod = SuggestionsMethodEnum.PhoneticAndTypo;
@@ -35,9 +41,11 @@ namespace KeyotiRapidSpell
 
     // Custom dictionary handling
     using Keyoti.RapidSpell.UserDictionaries;
-    public class UserDictionaryExample {
+    public class UserDictionaryExample 
+    {
         private readonly UserDictionary _userDict = new UserDictionary();
-        public void ManageUserDictionary() {
+        public void ManageUserDictionary() 
+        {
             _userDict.AddWord("CompanyName");
             _userDict.SaveDictionary("custom.dic");
         }
@@ -45,20 +53,22 @@ namespace KeyotiRapidSpell
 
     // Spell check events
     using Keyoti.RapidSpell.Events;
-    public class SpellCheckEventsExample {
+    public class SpellCheckEventsExample 
+    {
         private readonly RapidSpellChecker _checker = new RapidSpellChecker();
-        public void SetupEvents() {
-            _checker.MisspelledWord += (sender, args) => {
-                Console.WriteLine($"Misspelled word: {args.Word}");
-            };
+        public void SetupEvents() 
+        {
+            _checker.MisspelledWord += (sender, args) => {Console.WriteLine($"Misspelled word: {args.Word}");};
         }
     }
 
     // Language support
     using Keyoti.RapidSpell.Languages;
-    public class LanguageExample {
+    public class LanguageExample 
+    {
         private readonly LanguageConfig _langConfig = new LanguageConfig();
-        public void ConfigureLanguage() {
+        public void ConfigureLanguage() 
+        {
             _langConfig.SetLanguage(LanguageType.English);
             _langConfig.LoadAlternateSpellings();
         }
@@ -66,18 +76,22 @@ namespace KeyotiRapidSpell
 
     // Text processing
     using Keyoti.RapidSpell.TextProcessing;
-    public class TextProcessExample {
+    public class TextProcessExample 
+    {
         private readonly TextProcessor _processor = new TextProcessor();
-        public string[] ProcessText(string text) {
+        public string[] ProcessText(string text) 
+        {
             return _processor.SplitIntoWords(text);
         }
     }
 
     // Spell check dialog
     using Keyoti.RapidSpell.Dialog;
-    public class SpellDialogExample {
+    public class SpellDialogExample 
+    {
         private readonly SpellCheckDialog _dialog = new SpellCheckDialog();
-        public void ShowSpellDialog(string text) {
+        public void ShowSpellDialog(string text) 
+        {
             _dialog.Text = text;
             _dialog.ShowDialog();
         }
@@ -85,18 +99,22 @@ namespace KeyotiRapidSpell
 
     // Custom suggestions
     using Keyoti.RapidSpell.Suggestions;
-    public class SuggestionsExample {
+    public class SuggestionsExample 
+    {
         private readonly SuggestionGenerator _generator = new SuggestionGenerator();
-        public string[] GetSuggestions(string word) {
+        public string[] GetSuggestions(string word) 
+        {
             return _generator.GetSuggestions(word, 5);
         }
     }
 
     // Configuration settings
     using Keyoti.RapidSpell.Configuration;
-    public class ConfigurationExample {
+    public class ConfigurationExample 
+    {
         private readonly SpellCheckerConfig _config = new SpellCheckerConfig();
-        public void SetConfiguration() {
+        public void SetConfiguration() 
+        {
             _config.MaxSuggestions = 10;
             _config.CaseSensitive = false;
         }
