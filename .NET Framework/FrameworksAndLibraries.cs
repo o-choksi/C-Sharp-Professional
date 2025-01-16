@@ -1,212 +1,383 @@
 using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Diagnostics;
+using System.Drawing;
+using System.IO;
+using System.Management;
+using System.Media;
+using System.Net;
+using System.Net.Mail;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Security.Cryptography;
+using System.ServiceProcess;
+using System.Speech.Synthesis;
+using System.Text;
+using System.Threading;
+using System.Windows.Forms;
+using System.Xml;
 
-namespace DotNetFramework
+namespace NETFramework
 {
-    // File System Operations
-    using System.IO;
-    public class FileExample 
+    // System Examples
+    public class SystemExamples
     {
-        private readonly FileStream _file;
-        public void ProcessFile() 
+        public void BasicTypes()
         {
-            _file = File.Open("test.txt", FileMode.Create);
-            byte[] data = System.Text.Encoding.UTF8.GetBytes("Hello World");
-            _file.Write(data, 0, data.Length);
-            _file.Close();
+            string text = "Hello World";
+            int number = 42;
+            DateTime now = DateTime.Now;
+            bool flag = true;
+            decimal money = 99.99m;
+            Guid id = Guid.NewGuid();
+            TimeSpan duration = TimeSpan.FromHours(1);
+            Uri url = new Uri("http://example.com");
+            Version version = new Version(1, 0);
+            Random random = new Random();
         }
     }
 
-    // XML Processing
-    using System.Xml;
-    public class XmlExample 
+    // System.Collections.Generic Examples
+    public class CollectionsExamples
     {
-        private readonly XmlDocument _doc;
-        public void ManageXml() 
+        public void CollectionTypes()
         {
-            _doc = new XmlDocument();
-            XmlElement root = _doc.CreateElement("root");
-            root.SetAttribute("id", "1");
-            _doc.AppendChild(root);
-            _doc.Save("data.xml");
+            List<string> list = new List<string>();
+            Dictionary<int, string> dict = new Dictionary<int, string>();
+            Queue<int> queue = new Queue<int>();
+            Stack<double> stack = new Stack<double>();
+            HashSet<string> set = new HashSet<string>();
+            LinkedList<int> linked = new LinkedList<int>();
+            SortedList<string, int> sorted = new SortedList<string, int>();
+            SortedDictionary<int, string> sortedDict = new SortedDictionary<int, string>();
+            SortedSet<int> sortedSet = new SortedSet<int>();
+            KeyValuePair<string, int> pair = new KeyValuePair<string, int>("key", 1);
         }
     }
 
-    // Network Communication
-    using System.Net;
-    public class NetworkExample 
+    // System.Data Examples
+    public class DataExamples
     {
-        private readonly WebClient _client;
-        public void MakeRequest() 
+        public void DataOperations()
         {
-            _client = new WebClient();
-            string data = _client.DownloadString("http://api.example.com");
-            _client.UploadString("http://api.example.com", "POST", "data");
+            DataSet dataSet = new DataSet("MyDataSet");
+            DataTable table = new DataTable("MyTable");
+            DataRow row = table.NewRow();
+            DataColumn column = new DataColumn("Column1", typeof(string));
+            DataView view = new DataView(table);
+            DataRelation relation = new DataRelation("Relation1", column, column);
+            DataAdapter adapter = new DataAdapter();
+            CommandType cmdType = CommandType.StoredProcedure;
+            IsolationLevel isolation = IsolationLevel.ReadCommitted;
+            ConstraintCollection constraints = table.Constraints;
         }
     }
 
-    // Threading
-    using System.Threading;
-    public class ThreadingExample 
+    // System.Data.SqlClient Examples
+    public class SqlClientExamples
     {
-        private readonly Thread _worker;
-        public void RunThread() 
+        public void DatabaseOperations()
         {
-            _worker = new Thread(() => {Thread.Sleep(1000); Console.WriteLine("Worker completed");});
-            _worker.Start();
+            SqlConnection conn = new SqlConnection("connection_string");
+            SqlCommand cmd = new SqlCommand("SELECT * FROM Table");
+            SqlDataReader reader = null;
+            SqlParameter param = new SqlParameter("@id", SqlDbType.Int);
+            SqlDataAdapter adapter = new SqlDataAdapter();
+            SqlTransaction trans = null;
+            SqlBulkCopy bulkCopy = new SqlBulkCopy(conn);
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
+            SqlException sqlEx = null;
+            SqlInfoMessageEventArgs msgArgs = null;
         }
     }
 
-    // Collections
-    using System.Collections.Concurrent;
-    public class CollectionExample 
+    // System.Diagnostics Examples
+    public class DiagnosticsExamples
     {
-        private readonly ConcurrentDictionary<string, int> _dict;
-        public void ManageCollection() 
+        public void DiagnosticOperations()
         {
-            _dict = new ConcurrentDictionary<string, int>();
-            _dict.TryAdd("key1", 100);
-            _dict.AddOrUpdate("key2", 1, (key, old) => old + 1);
+            Process process = Process.GetCurrentProcess();
+            EventLog eventLog = new EventLog("Application");
+            PerformanceCounter perfCounter = new PerformanceCounter();
+            ProcessStartInfo startInfo = new ProcessStartInfo("notepad.exe");
+            Debug.WriteLine("Debug message");
+            Trace.WriteLine("Trace message");
+            StackTrace stackTrace = new StackTrace();
+            ProcessThread thread = process.Threads[0];
+            ProcessModuleCollection modules = process.Modules;
+            ProcessThreadCollection threads = process.Threads;
         }
     }
 
-    // Reflection
-    using System.Reflection;
-    public class ReflectionExample 
+    // System.Drawing Examples
+    public class DrawingExamples
     {
-        private readonly Assembly _assembly;
-        public void InspectAssembly() 
+        public void GraphicsOperations()
         {
-            _assembly = Assembly.GetExecutingAssembly();
-            Type[] types = _assembly.GetTypes();
-            foreach(Type t in types) 
-            {
-                Console.WriteLine(t.Name);
-            }
+            Bitmap bitmap = new Bitmap(100, 100);
+            Graphics graphics = Graphics.FromImage(bitmap);
+            Font font = new Font("Arial", 12);
+            Pen pen = new Pen(Color.Black);
+            Brush brush = new SolidBrush(Color.Red);
+            Point point = new Point(10, 10);
+            Rectangle rect = new Rectangle(0, 0, 100, 100);
+            Image image = Image.FromFile("image.jpg");
+            Icon icon = new Icon("icon.ico");
+            ColorConverter converter = new ColorConverter();
         }
     }
 
-    // Serialization
-    using System.Runtime.Serialization;
-    public class SerializationExample 
+    // System.IO Examples
+    public class IOExamples
     {
-        private readonly DataContractSerializer _serializer;
-        public void Serialize() 
+        public void FileOperations()
         {
-            _serializer = new DataContractSerializer(typeof(Person));
-            using(FileStream fs = new FileStream("person.xml", FileMode.Create)) 
-            {
-                _serializer.WriteObject(fs, new Person());
-            }
+            FileStream fs = File.Create("test.txt");
+            StreamReader reader = new StreamReader("input.txt");
+            StreamWriter writer = new StreamWriter("output.txt");
+            DirectoryInfo dir = new DirectoryInfo("path");
+            FileInfo file = new FileInfo("file.txt");
+            Path.Combine("path1", "path2");
+            BinaryReader binReader = new BinaryReader(fs);
+            BinaryWriter binWriter = new BinaryWriter(fs);
+            MemoryStream memStream = new MemoryStream();
+            BufferedStream buffStream = new BufferedStream(fs);
         }
     }
 
-    // Security
-    using System.Security.Cryptography;
-    public class SecurityExample 
+    // System.Management Examples
+    public class ManagementExamples
     {
-        private readonly RSACryptoServiceProvider _rsa;
-        public void Encrypt() 
+        public void ManagementOperations()
         {
-            _rsa = new RSACryptoServiceProvider();
-            byte[] data = System.Text.Encoding.UTF8.GetBytes("Secret data");
-            byte[] encrypted = _rsa.Encrypt(data, false);
+            ManagementObject mgmtObj = new ManagementObject();
+            ManagementClass mgmtClass = new ManagementClass();
+            ManagementPath path = new ManagementPath();
+            ManagementScope scope = new ManagementScope();
+            SelectQuery query = new SelectQuery("SELECT * FROM Win32_Process");
+            ManagementObjectSearcher searcher = new ManagementObjectSearcher(query);
+            ManagementBaseObject baseObj = null;
+            ManagementEventWatcher watcher = new ManagementEventWatcher();
+            ManagementOperationObserver observer = new ManagementOperationObserver();
+            WqlEventQuery eventQuery = new WqlEventQuery();
         }
     }
 
-    // Configuration
-    using System.Configuration;
-    public class ConfigExample 
+    // System.Media Examples
+    public class MediaExamples
     {
-        private readonly Configuration _config;
-        public void ManageConfig() 
+        public void MediaOperations()
         {
-            _config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            _config.AppSettings.Settings.Add("key", "value");
-            _config.Save();
+            SoundPlayer player = new SoundPlayer();
+            player.SoundLocation = "sound.wav";
+            SystemSounds.Asterisk.Play();
+            SystemSounds.Beep.Play();
+            SystemSounds.Exclamation.Play();
+            SystemSounds.Hand.Play();
+            SystemSounds.Question.Play();
+            player.LoadAsync();
+            player.PlaySync();
+            player.Stop();
         }
     }
 
-    // Drawing
-    using System.Drawing;
-    public class DrawingExample 
+    // System.Net Examples
+    public class NetworkExamples
     {
-        private readonly Bitmap _bitmap;
-        public void CreateImage() 
+        public void NetworkOperations()
         {
-            _bitmap = new Bitmap(800, 600);
-            using(Graphics g = Graphics.FromImage(_bitmap)) 
-            {
-                g.DrawRectangle(Pens.Black, 0, 0, 100, 100);
-            }
+            WebClient client = new WebClient();
+            IPAddress ip = IPAddress.Parse("127.0.0.1");
+            NetworkCredential cred = new NetworkCredential("user", "pass");
+            WebRequest request = WebRequest.Create("http://example.com");
+            WebResponse response = null;
+            FtpWebRequest ftpRequest = (FtpWebRequest)WebRequest.Create("ftp://example.com");
+            IPHostEntry host = Dns.GetHostEntry("localhost");
+            Cookie cookie = new Cookie("name", "value");
+            SocketAddress addr = new SocketAddress(AddressFamily.InterNetwork);
+            NetworkStream netStream = null;
         }
     }
 
-    // Windows Forms
-    using System.Windows.Forms;
-    public class WinFormsExample 
+    // System.Net.Mail Examples
+    public class MailExamples
     {
-        private readonly Form _form;
-        public void ShowForm() 
+        public void MailOperations()
         {
-            _form = new Form();
-            _form.Text = "Example Form";
-            _form.Width = 400;
-            _form.Height = 300;
-            _form.Show();
+            MailMessage message = new MailMessage();
+            SmtpClient client = new SmtpClient();
+            MailAddress from = new MailAddress("from@example.com");
+            MailAddress to = new MailAddress("to@example.com");
+            Attachment attachment = new Attachment("file.txt");
+            AlternateView view = AlternateView.CreateAlternateViewFromString("content");
+            LinkedResource resource = new LinkedResource("image.jpg");
+            MailPriority priority = MailPriority.Normal;
+            message.Subject = "Test";
+            message.Body = "Content";
         }
     }
 
-    // Regular Expressions
-    using System.Text.RegularExpressions;
-    public class RegexExample 
+    // System.Reflection Examples
+    public class ReflectionExamples
     {
-        private readonly Regex _regex;
-        public void ValidateText() 
+        public void ReflectionOperations()
         {
-            _regex = new Regex(@"^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$");
-            bool isValid = _regex.IsMatch("test@email.com");
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            Type type = typeof(string);
+            MethodInfo method = type.GetMethod("ToString");
+            PropertyInfo property = type.GetProperty("Length");
+            FieldInfo field = type.GetField("Empty");
+            ConstructorInfo ctor = type.GetConstructor(Type.EmptyTypes);
+            Module module = assembly.GetModule("module");
+            ParameterInfo param = method.GetParameters()[0];
+            MemberInfo member = type.GetMember("Length")[0];
+            EventInfo eventInfo = type.GetEvent("EventName");
         }
     }
 
-    // Diagnostics
-    using System.Diagnostics;
-    public class DiagnosticsExample 
+    // System.Runtime.InteropServices Examples
+    public class InteropExamples
     {
-        private readonly EventLog _log;
-        public void WriteLog() 
+        public void InteropOperations()
         {
-            _log = new EventLog("Application");
-            _log.Source = "MyApplication";
-            _log.WriteEntry("Application started", EventLogEntryType.Information);
+            GCHandle handle = GCHandle.Alloc(new object());
+            Marshal.AllocHGlobal(100);
+            ComImportAttribute comImport = new ComImportAttribute();
+            DllImportAttribute dllImport = new DllImportAttribute("kernel32.dll");
+            StructLayoutAttribute structLayout = new StructLayoutAttribute(LayoutKind.Sequential);
+            SafeHandle safeHandle = null;
+            HandleRef handleRef = new HandleRef();
+            COMException comEx = null;
+            UnmanagedType unmanagedType = UnmanagedType.Bool;
+            IntPtr ptr = IntPtr.Zero;
         }
     }
 
-    // Transactions
-    using System.Transactions;
-    public class TransactionExample 
+    // System.Security.Cryptography Examples
+    public class CryptoExamples
     {
-        private readonly TransactionScope _scope;
-        public void ExecuteTransaction() 
+        public void CryptoOperations()
         {
-            _scope = new TransactionScope();
-            // Perform transactional operations
-            _scope.Complete();
+            MD5 md5 = MD5.Create();
+            SHA256 sha256 = SHA256.Create();
+            RSA rsa = RSA.Create();
+            AES aes = AES.Create();
+            HMAC hmac = HMAC.Create();
+            TripleDES des3 = TripleDES.Create();
+            DSA dsa = DSA.Create();
+            RandomNumberGenerator rng = RandomNumberGenerator.Create();
+            CryptoStream cryptoStream = null;
+            HashAlgorithm hash = SHA1.Create();
         }
     }
 
-    // Data Access
-    using System.Data.SqlClient;
-    public class SqlExample 
+    // System.ServiceProcess Examples
+    public class ServiceExamples
     {
-        private readonly SqlConnection _connection;
-        public void QueryDatabase() 
+        public void ServiceOperations()
         {
-            _connection = new SqlConnection("connection_string");
-            _connection.Open();
-            using(SqlCommand cmd = new SqlCommand("SELECT * FROM Users", _connection)) 
-            {
-                SqlDataReader reader = cmd.ExecuteReader();
-            }
+            ServiceController controller = new ServiceController("Service");
+            ServiceControllerStatus status = ServiceControllerStatus.Running;
+            ServiceType serviceType = ServiceType.Win32OwnProcess;
+            ServiceStartMode startMode = ServiceStartMode.Automatic;
+            TimeSpan timeout = TimeSpan.FromSeconds(30);
+            controller.Start();
+            controller.Stop();
+            controller.Pause();
+            controller.Continue();
+            controller.WaitForStatus(ServiceControllerStatus.Running);
+        }
+    }
+
+    // System.Speech.Synthesis Examples
+    public class SpeechExamples
+    {
+        public void SpeechOperations()
+        {
+            SpeechSynthesizer synth = new SpeechSynthesizer();
+            VoiceInfo voice = synth.Voice;
+            PromptBuilder builder = new PromptBuilder();
+            SpeechSynthesizerState state = SpeechSynthesizerState.Ready;
+            synth.SetOutputToDefaultAudioDevice();
+            synth.Speak("Hello World");
+            synth.SpeakAsync("Async speech");
+            synth.Rate = 0;
+            synth.Volume = 100;
+            synth.SelectVoice("Voice Name");
+        }
+    }
+
+    // System.Text Examples
+    public class TextExamples
+    {
+        public void TextOperations()
+        {
+            StringBuilder builder = new StringBuilder();
+            Encoding utf8 = Encoding.UTF8;
+            ASCIIEncoding ascii = new ASCIIEncoding();
+            UnicodeEncoding unicode = new UnicodeEncoding();
+            UTF32Encoding utf32 = new UTF32Encoding();
+            UTF7Encoding utf7 = new UTF7Encoding();
+            Decoder decoder = utf8.GetDecoder();
+            Encoder encoder = utf8.GetEncoder();
+            byte[] bytes = utf8.GetBytes("text");
+            char[] chars = new char[10];
+        }
+    }
+
+    // System.Threading Examples
+    public class ThreadingExamples
+    {
+        public void ThreadOperations()
+        {
+            Thread thread = new Thread(() => Console.WriteLine("Hello"));
+            ThreadPool.QueueUserWorkItem(state => Console.WriteLine("Work"));
+            Mutex mutex = new Mutex();
+            Semaphore semaphore = new Semaphore(1, 1);
+            Monitor.Enter(new object());
+            AutoResetEvent autoEvent = new AutoResetEvent(false);
+            ManualResetEvent manualEvent = new ManualResetEvent(false);
+            ReaderWriterLock rwLock = new ReaderWriterLock();
+            Timer timer = new Timer(state => Console.WriteLine("Tick"));
+            ThreadLocal<int> local = new ThreadLocal<int>();
+        }
+    }
+
+    // System.Windows.Forms Examples
+    public class WindowsFormsExamples
+    {
+        public void FormOperations()
+        {
+            Form form = new Form();
+            Button button = new Button();
+            TextBox textBox = new TextBox();
+            Label label = new Label();
+            ComboBox comboBox = new ComboBox();
+            ListBox listBox = new ListBox();
+            MenuStrip menuStrip = new MenuStrip();
+            ToolStrip toolStrip = new ToolStrip();
+            StatusStrip statusStrip = new StatusStrip();
+            NotifyIcon notifyIcon = new NotifyIcon();
+        }
+    }
+
+    // System.Xml Examples
+    public class XmlExamples
+    {
+        public void XmlOperations()
+        {
+            XmlDocument doc = new XmlDocument();
+            XmlNode node = doc.CreateElement("element");
+            XmlAttribute attr = doc.CreateAttribute("name");
+            XmlReader reader = XmlReader.Create("file.xml");
+            XmlWriter writer = XmlWriter.Create("output.xml");
+            XmlNodeList nodeList = doc.SelectNodes("//path");
+            XmlNamespaceManager nsManager = new XmlNamespaceManager(new NameTable());
+            XmlSchema schema = new XmlSchema();
+            XmlDeclaration declaration = doc.CreateXmlDeclaration("1.0", "UTF-8", null);
+            XmlCDataSection cdata = doc.CreateCDataSection("data");
         }
     }
 }

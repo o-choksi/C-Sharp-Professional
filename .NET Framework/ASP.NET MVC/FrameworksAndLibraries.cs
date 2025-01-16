@@ -1,158 +1,194 @@
 using System;
+using System.Web;
+using System.Web.Mvc;
+using System.Web.Mvc.Ajax;
+using System.Web.Mvc.Html;
+using System.Web.Mvc.Filters;
+using System.Web.Mvc.Routing;
+using System.Web.Mvc.Async;
+using System.Web.Mvc.ModelBinding;
+using System.Web.Mvc.Properties;
 
-namespace AspNetMVC
+namespace ASPNetMVC
 {
-    // ASP.NET MVC Controllers
-    using System.Web.Mvc;
-    public class HomeController : Controller 
+    // System Examples
+    public class SystemExamples
     {
-        public ActionResult Index() 
+        public void DateTimeExample()
         {
-            return View("Hello World");
+            DateTime now = DateTime.Now;
+            TimeSpan duration = TimeSpan.FromHours(1);
+            Guid uniqueId = Guid.NewGuid();
+            Uri url = new Uri("http://example.com");
+            Exception ex = new Exception("Error message");
+            Type type = typeof(string);
+            Version ver = new Version(1, 0);
+            Random rand = new Random();
+            Math.Round(3.14159, 2);
+            Convert.ToString(42);
         }
     }
 
-    // ASP.NET MVC Routing
-    using System.Web.Mvc;
-    using System.Web.Routing;
-    public class RouteConfig 
+    // System.Web Examples
+    public class WebExamples
     {
-        public static void RegisterRoutes(RouteCollection routes) 
+        public void HttpExamples(HttpContext context)
         {
-            routes.MapRoute(
-                name: "Default",
-                url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
-            );
+            HttpCookie cookie = new HttpCookie("name", "value");
+            HttpRequest request = context.Request;
+            HttpResponse response = context.Response;
+            HttpServerUtility server = context.Server;
+            HttpApplicationState app = context.Application;
+            HttpBrowserCapabilities browser = context.Request.Browser;
+            HttpCachePolicy cache = context.Response.Cache;
+            HttpFileCollection files = context.Request.Files;
+            HttpModuleCollection modules = context.ApplicationInstance.Modules;
+            HttpStaticObjectsCollection staticObjects = context.Application.StaticObjects;
         }
     }
 
-    // ASP.NET MVC Actions
-    using System.Web.Mvc;
-    public class ProductController : Controller 
+    // System.Web.Mvc Examples
+    public class MvcExamples : Controller
     {
-        [HttpPost]
-        public ActionResult Create(ProductModel model) 
+        public ActionResult Example1() => View();
+        public JsonResult Example2() => Json(new { data = "value" });
+        public ContentResult Example3() => Content("text");
+        public FileResult Example4() => File(new byte[] { }, "application/pdf");
+        public RedirectResult Example5() => Redirect("/home");
+        public PartialViewResult Example6() => PartialView();
+        public EmptyResult Example7() => new EmptyResult();
+        public HttpStatusCodeResult Example8() => new HttpStatusCodeResult(200);
+        public HttpNotFoundResult Example9() => HttpNotFound();
+        public HttpUnauthorizedResult Example10() => new HttpUnauthorizedResult();
+    }
+
+    // System.Web.Mvc.Ajax Examples
+    public class AjaxExamples : Controller
+    {
+        public void AjaxMethods()
         {
-            if (ModelState.IsValid) {
-                return RedirectToAction("Index");
-            }
-            return View(model);
+            AjaxOptions options1 = new AjaxOptions { UpdateTargetId = "div1" };
+            AjaxOptions options2 = new AjaxOptions { Confirm = "Are you sure?" };
+            AjaxOptions options3 = new AjaxOptions { HttpMethod = "POST" };
+            AjaxOptions options4 = new AjaxOptions { OnBegin = "startFunction" };
+            AjaxOptions options5 = new AjaxOptions { OnComplete = "completeFunction" };
+            AjaxOptions options6 = new AjaxOptions { OnFailure = "errorFunction" };
+            AjaxOptions options7 = new AjaxOptions { OnSuccess = "successFunction" };
+            AjaxOptions options8 = new AjaxOptions { LoadingElementId = "loader" };
+            AjaxOptions options9 = new AjaxOptions { InsertionMode = InsertionMode.Replace };
+            AjaxOptions options10 = new AjaxOptions { AllowCache = false };
         }
     }
 
-    // ASP.NET MVC Models
-    using System.ComponentModel.DataAnnotations;
-    public class ProductModel 
+    // System.Web.Mvc.Html Examples
+    public class HtmlExamples : Controller
     {
-        [Required]
-        public string Name { get; set; }
-        [Range(0, 1000)]
-        public decimal Price { get; set; }
-    }
-
-    // ASP.NET MVC Filters
-    using System.Web.Mvc;
-    public class CustomAuthAttribute : AuthorizeAttribute 
-    {
-        protected override bool AuthorizeCore(HttpContextBase httpContext) 
+        public void HtmlHelperMethods(HtmlHelper html)
         {
-            return httpContext.User.Identity.IsAuthenticated;
+            html.TextBox("name");
+            html.Password("password");
+            html.CheckBox("agree");
+            html.RadioButton("choice", "value");
+            html.DropDownList("items");
+            html.TextArea("description");
+            html.Hidden("id");
+            html.Label("fieldName");
+            html.ActionLink("Click", "Action");
+            html.ValidationMessage("field");
         }
     }
 
-    // ASP.NET MVC HTML Helpers
-    using System.Web.Mvc;
-    public static class CustomHtmlHelpers 
-    {
-        public static MvcHtmlString CustomHelper(this HtmlHelper helper, string content) 
-        {
-            return MvcHtmlString.Create($"<div class='custom'>{content}</div>");
-        }
-    }
-
-    // ASP.NET MVC Forms Authentication
-    using System.Web.Mvc;
-    using System.Web.Security;
-    public class AccountController : Controller 
-    {
-        public ActionResult Login(string username, string password) 
-        {
-            FormsAuthentication.SetAuthCookie(username, false);
-            return RedirectToAction("Index", "Home");
-        }
-    }
-
-    // ASP.NET MVC Caching
-    using System.Web.Mvc;
-    public class CachingController : Controller 
+    // System.Web.Mvc.Filters Examples
+    public class FilterExamples
     {
         [OutputCache(Duration = 300)]
-        public ActionResult CachedAction() 
+        [Authorize]
+        [HandleError]
+        [RequireHttps]
+        [ValidateInput(false)]
+        [ValidateAntiForgeryToken]
+        [ActionName("CustomName")]
+        [NonAction]
+        [ChildActionOnly]
+        [AcceptVerbs(HttpVerbs.Post)]
+        public void FilteredMethod() { }
+    }
+
+    // System.Web.Mvc.Routing Examples
+    public class RoutingExamples
+    {
+        public void RouteExamples(RouteCollection routes)
         {
-            return View();
+            routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+            routes.MapRoute("Route1", "blog/{year}/{month}");
+            routes.MapRoute("Route2", "{controller}/{action}");
+            routes.MapRoute("Route3", "api/{controller}");
+            routes.MapRoute("Route4", "{culture}/{controller}");
+            routes.MapRoute("Route5", "pages/{*url}");
+            routes.MapRoute("Route6", "{controller}.aspx/{action}");
+            routes.MapRoute("Route7", "{area}/{controller}");
+            routes.MapRoute("Route8", "static/{filename}");
+            routes.MapRoute("Route9", "{controller}/{id:int}");
         }
     }
 
-    // ASP.NET MVC Configuration
-    using System.Configuration;
-    using System.Web.Mvc;
-    public class ConfigController : Controller 
+    // System.Web.Mvc.Async Examples
+    public class AsyncExamples : AsyncController
     {
-        public ActionResult GetConfig() 
+        public async Task<ActionResult> Action1() => await Task.FromResult(View());
+        public async Task<JsonResult> Action2() => await Task.FromResult(Json(new { }));
+        public async Task<FileResult> Action3() => await Task.FromResult(File(new byte[] { }, "text/plain"));
+        public async Task<ContentResult> Action4() => await Task.FromResult(Content("text"));
+        public async Task<RedirectResult> Action5() => await Task.FromResult(Redirect("/"));
+        public async Task<PartialViewResult> Action6() => await Task.FromResult(PartialView());
+        public async Task<EmptyResult> Action7() => await Task.FromResult(new EmptyResult());
+        public async Task<HttpStatusCodeResult> Action8() => await Task.FromResult(new HttpStatusCodeResult(200));
+        public async Task<HttpNotFoundResult> Action9() => await Task.FromResult(HttpNotFound());
+        public async Task<ViewResult> Action10() => await Task.FromResult(View());
+    }
+
+    // System.Web.Mvc.ModelBinding Examples
+    public class ModelBindingExamples
+    {
+        [ModelBinder(typeof(CustomBinder))]
+        public class Model1 { }
+
+        public class CustomBinder : IModelBinder
         {
-            ViewBag.Setting = ConfigurationManager.AppSettings["Key"];
-            return View();
+            public object BindModel(ControllerContext controllerContext, ModelBindingContext bindingContext) => null;
+        }
+
+        public void BindingExamples(ModelBindingContext context)
+        {
+            context.ModelMetadata.ShowForDisplay = true;
+            context.ModelMetadata.ShowForEdit = true;
+            context.ModelMetadata.IsRequired = true;
+            context.ModelMetadata.DisplayName = "Name";
+            context.ModelMetadata.Description = "Description";
+            context.ModelMetadata.Order = 1;
+            context.ModelMetadata.HideSurroundingHtml = true;
+            context.ModelMetadata.TemplateHint = "Template";
+            context.ModelMetadata.IsReadOnly = false;
+            context.ModelMetadata.ConvertEmptyStringToNull = true;
         }
     }
 
-    // ASP.NET MVC Session State
-    using System.Web.Mvc;
-    public class SessionController : Controller 
+    // System.Web.Mvc.Properties Examples
+    public class PropertiesExamples
     {
-        public ActionResult SetSession() 
+        public void PropertyExamples()
         {
-            Session["UserKey"] = "UserValue";
-            return RedirectToAction("Index");
+            var resources = new Resources();
+            string str1 = Resources.ArgumentCannotBeNullOrEmpty;
+            string str2 = Resources.PropertyValueInvalid;
+            string str3 = Resources.PropertyValueRequired;
+            string str4 = Resources.ViewDataDictionary_WrongTModelType;
+            string str5 = Resources.Common_PropertyNotFound;
+            string str6 = Resources.Common_NullOrEmpty;
+            string str7 = Resources.DefaultModelBinder_ValueRequired;
+            string str8 = Resources.ModelBinderDictionary_MultipleAttributes;
+            string str9 = Resources.Resources_UnsupportedFormat;
+            string str10 = Resources.ChildActionOnlyAttribute_MustBeInChildRequest;
         }
     }
-
-    // ASP.NET MVC File Handling
-    using System.Web.Mvc;
-    public class FileController : Controller 
-    {
-        [HttpPost]
-        public ActionResult Upload(HttpPostedFileBase file) 
-        {
-            if (file != null) 
-            {
-                file.SaveAs(Server.MapPath("~/uploads/") + file.FileName);
-            }
-            return RedirectToAction("Index");
-        }
-    }
-
-    // ASP.NET MVC Ajax
-    using System.Web.Mvc;
-    public class AjaxController : Controller 
-    {
-        [HttpGet]
-        public JsonResult GetData() 
-        {
-            return Json(new { message = "Hello World" }, JsonRequestBehavior.AllowGet);
-        }
-    }
-
-    // ASP.NET MVC Areas
-    using System.Web.Mvc;
-    namespace Areas.Admin.Controllers 
-    {
-        public class DashboardController : Controller 
-        {
-            public ActionResult Index() 
-            {
-                return View();
-            }
-        }
-    }
-} 
+}

@@ -1,201 +1,183 @@
 using System;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Media.Animation;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+using System.Windows.Threading;
+using System.Windows.Markup;
+using System.Windows.Interop;
+using System.Windows.Automation;
 
 namespace WPF
 {
-    // WPF Controls
-    using System.Windows.Controls;
-    public class MainWindow : Window 
+    // Basic WPF Window Example
+    public class BasicWindowExample : Window
     {
-        public MainWindow() 
+        public BasicWindowExample()
         {
-            Button button = new Button() 
-            {
-                Content = "Click Me",
-                Width = 100,
-                Height = 30
-            };
+            Title = "Basic WPF Window";
+            Width = 300;
+            Height = 200;
         }
     }
 
-    // WPF Layout
-    using System.Windows.Controls;
-    public class LayoutExample 
+    // WPF Controls Example
+    public class ControlsExample
     {
-        public Grid CreateLayout() 
+        public void CreateControls()
         {
-            Grid grid = new Grid();
-            grid.RowDefinitions.Add(new RowDefinition());
-            grid.ColumnDefinitions.Add(new ColumnDefinition());
-            return grid;
+            Button button = new Button { Content = "Click Me" };
+            TextBox textBox = new TextBox { Text = "Enter text" };
+            ComboBox comboBox = new ComboBox();
         }
     }
 
-    // WPF Data Binding
-    using System.ComponentModel;
-    public class ViewModel : INotifyPropertyChanged 
+    // WPF Data Binding Example
+    public class DataBindingExample
     {
-        private string _name;
-        public string Name 
+        public void BindData()
         {
-            get { return _name; }
-            set {
-                _name = value;
-                OnPropertyChanged("Name");
-            }
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged(string name) 
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+            Binding binding = new Binding("PropertyName");
+            binding.Mode = BindingMode.TwoWay;
+            binding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
         }
     }
 
-    // WPF Commands
-    using System.Windows.Input;
-    public class RelayCommand : ICommand 
+    // WPF Documents Example
+    public class DocumentsExample
     {
-        private Action _execute;
-        public RelayCommand(Action execute) 
+        public FlowDocument CreateDocument()
         {
-            _execute = execute;
-        }
-        public bool CanExecute(object parameter) { return true; }
-        public void Execute(object parameter) { _execute(); }
-        public event EventHandler CanExecuteChanged;
-    }
-
-    // WPF Styles and Templates
-    using System.Windows;
-    public class StyleExample 
-    {
-        public Style CreateButtonStyle() 
-        {
-            Style style = new Style(typeof(Button));
-            style.Setters.Add(new Setter(Button.BackgroundProperty, Brushes.Blue));
-            return style;
+            FlowDocument doc = new FlowDocument();
+            Paragraph para = new Paragraph(new Run("Sample Text"));
+            doc.Blocks.Add(para);
+            return doc;
         }
     }
 
-    // WPF Animation
-    using System.Windows.Media.Animation;
-    public class AnimationExample 
+    // WPF Input Example
+    public class InputExample
     {
-        public void CreateAnimation() 
+        public void HandleInput()
         {
-            DoubleAnimation animation = new DoubleAnimation 
+            CommandBinding binding = new CommandBinding(
+                ApplicationCommands.Copy,
+                ExecuteCopy,
+                CanExecuteCopy);
+        }
+
+        private void ExecuteCopy(object sender, ExecutedRoutedEventArgs e) { }
+        private void CanExecuteCopy(object sender, CanExecuteRoutedEventArgs e) { }
+    }
+
+    // WPF Media Example
+    public class MediaExample
+    {
+        public void CreateMedia()
+        {
+            SolidColorBrush brush = new SolidColorBrush(Colors.Red);
+            LinearGradientBrush gradient = new LinearGradientBrush();
+        }
+    }
+
+    // WPF Imaging Example
+    public class ImagingExample
+    {
+        public BitmapImage LoadImage()
+        {
+            return new BitmapImage(new Uri("image.png", UriKind.Relative));
+        }
+    }
+
+    // WPF Animation Example
+    public class AnimationExample
+    {
+        public void CreateAnimation()
+        {
+            DoubleAnimation animation = new DoubleAnimation
             {
                 From = 0,
                 To = 100,
-                Duration = TimeSpan.FromSeconds(2)
+                Duration = new Duration(TimeSpan.FromSeconds(1))
             };
         }
     }
 
-    // WPF Resources
-    using System.Windows;
-    public class ResourceExample : Window {
-        public ResourceExample() 
+    // WPF Navigation Example
+    public class NavigationExample : NavigationWindow
+    {
+        public void Navigate()
         {
-            Resources.Add("ButtonBackground", Brushes.Red);
-            Button button = new Button();
-            button.SetResourceReference(Button.BackgroundProperty, "ButtonBackground");
+            NavigationService.Navigate(new Uri("Page.xaml", UriKind.Relative));
         }
     }
 
-    // WPF Triggers
-    using System.Windows;
-    public class TriggerExample 
+    // WPF Shapes Example
+    public class ShapesExample
     {
-        public Trigger CreateTrigger() 
+        public void DrawShapes()
         {
-            return new Trigger 
+            Rectangle rect = new Rectangle
             {
-                Property = UIElement.IsMouseOverProperty,
-                Value = true,
-                Setters = { new Setter(Button.BackgroundProperty, Brushes.Red) }
+                Width = 100,
+                Height = 100,
+                Fill = Brushes.Blue
             };
         }
     }
 
-    // WPF Dependency Properties
-    using System.Windows;
-    public class CustomControl : Control 
+    // WPF Threading Example
+    public class ThreadingExample
     {
-        public static readonly DependencyProperty CustomProperty = 
-            DependencyProperty.Register("Custom", typeof(string), typeof(CustomControl));
-            
-        public string Custom 
-        {
-            get { return (string)GetValue(CustomProperty); }
-            set { SetValue(CustomProperty, value); }
-        }
-    }
-
-    // WPF Attached Properties
-    using System.Windows;
-    public class GridHelpers 
-    {
-        public static readonly DependencyProperty RowCountProperty =
-            DependencyProperty.RegisterAttached("RowCount", typeof(int), typeof(GridHelpers));
-
-        public static void SetRowCount(Grid grid, int value) 
-        {
-            grid.SetValue(RowCountProperty, value);
-        }
-    }
-
-    // WPF Events and Routed Events
-    using System.Windows;
-    public class EventExample 
-    {
-        public static readonly RoutedEvent CustomEvent = 
-            EventManager.RegisterRoutedEvent("Custom", RoutingStrategy.Bubble, 
-                typeof(RoutedEventHandler), typeof(EventExample));
-    }
-
-    // WPF Visual States
-    using System.Windows;
-    public class VisualStateExample : Control 
-    {
-        static VisualStateExample() 
-        {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(VisualStateExample),
-                new FrameworkPropertyMetadata(typeof(VisualStateExample)));
-        }
-    }
-
-    // WPF Behaviors
-    using Microsoft.Xaml.Behaviors;
-    public class CustomBehavior : Behavior<UIElement> 
-    {
-        protected override void OnAttached() 
-        {
-            base.OnAttached();
-            AssociatedObject.MouseEnter += OnMouseEnter;
-        }
-    }
-
-    // WPF Threading
-    using System.Windows.Threading;
-    public class ThreadingExample 
-    {
-        public void UpdateUI() 
+        public void UpdateUI()
         {
             Dispatcher.BeginInvoke(DispatcherPriority.Normal,
-                new Action(() => {
-                    // UI update code
-                }));
+                new Action(() => { /* UI update code */ }));
         }
     }
 
-    // WPF Navigation
-    using System.Windows.Navigation;
-    public class NavigationExample : NavigationWindow 
+    // WPF XAML Example
+    public class MarkupExample
     {
-        public NavigationExample() 
+        public void LoadXaml()
         {
-            Navigate(new Uri("Page1.xaml", UriKind.Relative));
+            ParserContext context = new ParserContext();
+            FrameworkElement element = XamlReader.Parse("<Button>Click</Button>") as FrameworkElement;
+        }
+    }
+
+    // WPF Interop Example
+    public class InteropExample
+    {
+        public void HandleInterop()
+        {
+            HwndSource hwndSource = new HwndSource(new HwndSourceParameters());
+            IntPtr handle = hwndSource.Handle;
+        }
+    }
+
+    // WPF Automation Example
+    public class AutomationExample
+    {
+        public void SetAutomation()
+        {
+            AutomationProperties.SetAutomationId(new Button(), "MyButton");
+            AutomationProperties.SetName(new TextBox(), "MyTextBox");
+        }
+    }
+
+    // WPF Visual State Example
+    public class VisualStateExample
+    {
+        public void ManageStates()
+        {
+            VisualStateManager.GoToState(new Control(), "NormalState", true);
         }
     }
 }
