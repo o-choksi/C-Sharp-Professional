@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Builder;
@@ -15,20 +14,11 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.AspNetCore.Mvc.Filters;
 using System.Net.Http;
 using Microsoft.Extensions.Hosting;
 
 namespace AspNetCore
 {
-    // MVC Controllers Example
-    public class HomeController : Controller 
-    {
-        public IActionResult Index()
-        {
-            return View();
-        }
-    }
 
     // Middleware Example
     public class CustomMiddleware

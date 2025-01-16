@@ -2,22 +2,27 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Caching.Memory;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Abstractions;
+using Microsoft.AspNetCore.Mvc.ActionConstraints;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Mvc.Controllers;
+using Microsoft.AspNetCore.Mvc.Cors;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.Mvc.TagHelpers;
+using Microsoft.AspNetCore.Mvc.ViewComponents;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace AspNetCoreMVC
 {
     // 1. Microsoft.AspNetCore.Mvc Example
-    public class ProductController : Controller
+    public class HomeController : Controller
     {
         public IActionResult Index()
         {
@@ -25,204 +30,207 @@ namespace AspNetCoreMVC
         }
     }
 
-    // 2. Microsoft.AspNetCore.Http Example
-    public class HttpContextExample
+    // 2. Microsoft.AspNetCore.Mvc.Abstractions Example
+    public class ActionDescriptorExample
     {
-        public void ProcessRequest(HttpContext context)
+        public void ProcessActionDescriptor(ActionDescriptor descriptor)
         {
-            var path = context.Request.Path;
-            context.Response.WriteAsync("Hello World");
+            var displayName = descriptor.DisplayName;
+            var routeValues = descriptor.RouteValues;
         }
     }
 
-    // 3. Microsoft.AspNetCore.Routing Example
-    public class RouteExample
+    // 3. Microsoft.AspNetCore.Mvc.ActionConstraints Example
+    public class CustomActionConstraint : IActionConstraint
     {
-        public void ConfigureRoutes(IEndpointRouteBuilder endpoints)
+        public int Order => 0;
+
+        public bool Accept(ActionConstraintContext context)
         {
-            endpoints.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+            return context.RouteContext.HttpContext.Request.Headers.ContainsKey("Custom-Header");
         }
     }
 
-    // 4. Microsoft.AspNetCore.Builder Example
-    public class StartupExample
+    // 4. Microsoft.AspNetCore.Mvc.ApiExplorer Example
+    public class ApiDescriptionExample
     {
-        public void Configure(IApplicationBuilder app)
+        private readonly IApiDescriptionGroupCollectionProvider _apiExplorer;
+
+        public ApiDescriptionExample(IApiDescriptionGroupCollectionProvider apiExplorer)
         {
-            app.UseRouting();
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            _apiExplorer = apiExplorer;
         }
     }
 
-    // 5. Microsoft.AspNetCore.Hosting Example
-    public class HostingExample
+    // 5. Microsoft.AspNetCore.Mvc.ApplicationModels Example
+    public class CustomControllerModel : IControllerModelConvention
     {
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
-    }
-
-    // 6. Microsoft.AspNetCore.Identity Example
-    public class IdentityExample
-    {
-        private readonly UserManager<IdentityUser> _userManager;
-
-        public IdentityExample(UserManager<IdentityUser> userManager)
+        public void Apply(ControllerModel controller)
         {
-            _userManager = userManager;
-        }
-
-        public async Task CreateUser(string email, string password)
-        {
-            var user = new IdentityUser { UserName = email, Email = email };
-            await _userManager.CreateAsync(user, password);
+            controller.ControllerName = controller.ControllerName.Replace("Controller", "");
         }
     }
 
-    // 7. Microsoft.AspNetCore.Authorization Example
-    [Authorize]
-    public class SecuredController : Controller
+    // 6. Microsoft.AspNetCore.Mvc.Authorization Example
+    public class AuthorizedController : Controller
     {
-        [AllowAnonymous]
-        public IActionResult PublicAction()
+        [TypeFilter(typeof(AuthorizeFilter))]
+        public IActionResult SecureEndpoint()
         {
             return Ok();
         }
     }
 
-    // 8. Microsoft.Extensions.Configuration Example
-    public class ConfigExample
+    // 7. Microsoft.AspNetCore.Mvc.Controllers Example
+    public class ControllerExample : ControllerBase
     {
-        private readonly IConfiguration _configuration;
-
-        public ConfigExample(IConfiguration configuration)
+        public ActionResult<string> GetValue()
         {
-            _configuration = configuration;
-        }
-
-        public string GetConnectionString()
-        {
-            return _configuration.GetConnectionString("DefaultConnection");
+            return "Value";
         }
     }
 
-    // 9. Microsoft.Extensions.DependencyInjection Example
-    public class ServiceExample
+    // 8. Microsoft.AspNetCore.Mvc.Cors Example
+    [EnableCors("PolicyName")]
+    public class CorsController : Controller
     {
-        public static void ConfigureServices(IServiceCollection services)
+        public IActionResult CrossOriginRequest()
         {
-            services.AddScoped<IMyService, MyService>();
-            services.AddControllers();
+            return Ok();
         }
     }
 
-    // 10. Microsoft.Extensions.Logging Example
-    public class LogExample
+    // 9. Microsoft.AspNetCore.Mvc.Filters Example
+    public class CustomActionFilter : IActionFilter
     {
-        private readonly ILogger<LogExample> _logger;
-
-        public LogExample(ILogger<LogExample> logger)
+        public void OnActionExecuting(ActionExecutingContext context)
         {
-            _logger = logger;
+            // Before action execution
         }
 
-        public void DoSomething()
+        public void OnActionExecuted(ActionExecutedContext context)
         {
-            _logger.LogInformation("Method executed at {time}", DateTime.UtcNow);
+            // After action execution
         }
     }
 
-    // 11. Microsoft.Extensions.Caching.Memory Example
-    public class CacheExample
+    // 10. Microsoft.AspNetCore.Mvc.Formatters Example
+    public class CustomInputFormatter : InputFormatter
     {
-        private readonly IMemoryCache _cache;
-
-        public CacheExample(IMemoryCache cache)
+        public override bool CanRead(InputFormatterContext context)
         {
-            _cache = cache;
+            return context.HttpContext.Request.ContentType == "application/custom";
         }
 
-        public object GetOrCreate(string key)
+        public override Task<InputFormatterResult> ReadRequestBodyAsync(InputFormatterContext context)
         {
-            return _cache.GetOrCreate(key, entry =>
-            {
-                entry.SlidingExpiration = TimeSpan.FromHours(1);
-                return DateTime.Now;
-            });
+            return InputFormatterResult.SuccessAsync(new object());
         }
     }
 
-    // 12. Microsoft.EntityFrameworkCore Example
-    public class EFExample : DbContext
+    // 11. Microsoft.AspNetCore.Mvc.Infrastructure Example
+    public class ActionContextExample
     {
-        public EFExample(DbContextOptions<EFExample> options)
-            : base(options)
-        {
-        }
+        private readonly IActionContextAccessor _actionContextAccessor;
 
-        public DbSet<Product> Products { get; set; }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        public ActionContextExample(IActionContextAccessor actionContextAccessor)
         {
-            modelBuilder.Entity<Product>().HasKey(p => p.Id);
+            _actionContextAccessor = actionContextAccessor;
         }
     }
 
-    // 13. System.Collections.Generic Example
-    public class CollectionExample
+    // 12. Microsoft.AspNetCore.Mvc.ModelBinding Example
+    public class CustomModelBinder : IModelBinder
     {
-        public List<string> GetItems()
+        public Task BindModelAsync(ModelBindingContext bindingContext)
         {
-            return new List<string> { "Item1", "Item2", "Item3" };
-        }
-
-        public Dictionary<int, string> GetMappings()
-        {
-            return new Dictionary<int, string>
-            {
-                { 1, "One" },
-                { 2, "Two" }
-            };
+            var value = bindingContext.ValueProvider.GetValue(bindingContext.ModelName);
+            bindingContext.Result = ModelBindingResult.Success(value.FirstValue);
+            return Task.CompletedTask;
         }
     }
 
-    // 14. System.Threading.Tasks Example
-    public class AsyncExample
+    // 13. Microsoft.AspNetCore.Mvc.Razor Example
+    public class CustomRazorPage : RazorPage<dynamic>
     {
-        public async Task<string> GetDataAsync()
+        public override Task ExecuteAsync()
         {
-            await Task.Delay(1000); // Simulate async work
-            return "Data";
-        }
-
-        public async Task ProcessDataAsync()
-        {
-            var tasks = new List<Task>();
-            for (int i = 0; i < 10; i++)
-            {
-                tasks.Add(GetDataAsync());
-            }
-            await Task.WhenAll(tasks);
+            WriteLiteral("Hello from custom Razor page");
+            return Task.CompletedTask;
         }
     }
 
-    // 15. System Example
-    public class SystemExample
+    // 14. Microsoft.AspNetCore.Mvc.Routing Example
+    public class RoutingExample : Controller
     {
-        public void BasicOperations()
+        private readonly LinkGenerator _linkGenerator;
+
+        public RoutingExample(LinkGenerator linkGenerator)
         {
-            DateTime now = DateTime.UtcNow;
-            Guid uniqueId = Guid.NewGuid();
-            string formatted = String.Format("Time: {0}", now);
-            TimeSpan duration = TimeSpan.FromHours(1);
+            _linkGenerator = linkGenerator;
+        }
+    }
+
+    // 15. Microsoft.AspNetCore.Mvc.TagHelpers Example
+    public class CustomTagHelper : TagHelper
+    {
+        public override void Process(TagHelperContext context, TagHelperOutput output)
+        {
+            output.TagName = "div";
+            output.Content.SetContent("Custom Tag Helper Content");
+        }
+    }
+
+    // 16. Microsoft.AspNetCore.Mvc.ViewComponents Example
+    public class CustomViewComponent : ViewComponent
+    {
+        public IViewComponentResult Invoke()
+        {
+            return View("Default");
+        }
+    }
+
+    // 17. Microsoft.AspNetCore.Mvc.ViewFeatures Example
+    public class ViewFeaturesExample : Controller
+    {
+        public IActionResult UseViewData()
+        {
+            ViewData["Message"] = "Hello from ViewData";
+            return View();
+        }
+    }
+
+    // 18. Microsoft.AspNetCore.Mvc.RazorPages Example
+    public class CustomPageModel : PageModel
+    {
+        public void OnGet()
+        {
+            // Handle GET request
+        }
+    }
+
+    // 19. Microsoft.AspNetCore.Mvc.ViewEngines Example
+    public class CustomViewEngine : IViewEngine
+    {
+        public ViewEngineResult FindView(ActionContext context, string viewName, bool isMainPage)
+        {
+            return ViewEngineResult.NotFound(viewName, new string[] { });
+        }
+
+        public ViewEngineResult GetView(string executingFilePath, string viewPath, bool isMainPage)
+        {
+            return ViewEngineResult.NotFound(viewPath, new string[] { });
+        }
+    }
+
+    // 20. Microsoft.AspNetCore.Mvc.DataAnnotations Example
+    public class ValidationExample
+    {
+        private readonly IValidationAttributeAdapterProvider _validationProvider;
+
+        public ValidationExample(IValidationAttributeAdapterProvider validationProvider)
+        {
+            _validationProvider = validationProvider;
         }
     }
 }
