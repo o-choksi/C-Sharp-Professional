@@ -1,188 +1,165 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
-using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Components.Routing;
-using Microsoft.AspNetCore.Components.Server;
-using Microsoft.AspNetCore.Components.WebAssembly;
-using Microsoft.JSInterop;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using System.Net.Http;
-using System.Net.Http.Json;
+using Microsoft.AspNetCore.Components.Blazor;
+using Microsoft.AspNetCore.Components.Blazor.Forms;
+using Microsoft.AspNetCore.Components.Blazor.Hosting;
+using Microsoft.AspNetCore.Components.Blazor.Http;
+using Microsoft.AspNetCore.Components.Blazor.Rendering;
+using Microsoft.AspNetCore.Components.Blazor.Routing;
+using Microsoft.AspNetCore.Components.Blazor.Server;
+using Microsoft.AspNetCore.Components.Blazor.WebAssembly;
+using Microsoft.AspNetCore.Components.Blazor.WebAssembly.Authentication;
+using Microsoft.AspNetCore.Components.Blazor.WebAssembly.Hosting;
+using Microsoft.AspNetCore.Components.Blazor.WebAssembly.Http;
+using Microsoft.AspNetCore.Components.Blazor.WebAssembly.Infrastructure;
+using Microsoft.AspNetCore.Components.Blazor.WebAssembly.Services;
+using Microsoft.Extensions.DependencyInjection.Blazor;
+using Microsoft.JSInterop.Blazor;
 
 namespace Blazor
 {
-    // Microsoft.AspNetCore.Components Example
-    public class ComponentExample : ComponentBase
+    // Basic Blazor Component Example
+    public class BlazorComponentExample : ComponentBase
     {
-        [Parameter]
-        public string Title { get; set; }
-
         protected override void OnInitialized()
         {
-            Title = "Welcome to Blazor";
+            // Component initialization logic
         }
     }
 
-    // Microsoft.AspNetCore.Components.Web Example
-    public class EventExample : ComponentBase
+    // Blazor Forms Example
+    public class BlazorFormsExample : ComponentBase
     {
-        private string message = "";
-
-        private void HandleClick(MouseEventArgs e)
+        private void HandleValidSubmit()
         {
-            message = $"Mouse clicked at position: {e.ClientX}, {e.ClientY}";
+            // Form submission logic
         }
     }
 
-    // Microsoft.AspNetCore.Components.Forms Example
-    public class FormExample : ComponentBase
+    // Blazor Hosting Example
+    public class BlazorHostingExample
     {
-        private Model model = new Model();
-
-        private void HandleValidSubmit(EditContext context)
+        public void ConfigureHost(IBlazorHostBuilder builder)
         {
-            // Process the valid form
+            builder.UseWebAssemblyDebugging();
         }
     }
 
-    // Microsoft.AspNetCore.Components.Authorization Example
-    public class AuthExample : ComponentBase
+    // Blazor Http Example
+    public class BlazorHttpExample
     {
-        [CascadingParameter]
-        private Task<AuthenticationState> authenticationStateTask { get; set; }
+        private readonly HttpClient _httpClient;
 
-        private async Task GetUserInfo()
+        public async Task FetchDataAsync()
         {
-            var authState = await authenticationStateTask;
-            var user = authState.User;
+            await _httpClient.GetJsonAsync<WeatherForecast[]>("weatherforecast");
         }
     }
 
-    // Microsoft.AspNetCore.Components.Routing Example
-    [Route("/counter")]
-    public class RouteExample : ComponentBase
+    // Blazor Rendering Example
+    public class BlazorRenderingExample : ComponentBase
+    {
+        protected override void BuildRenderTree(RenderTreeBuilder builder)
+        {
+            builder.OpenElement(0, "div");
+            builder.AddContent(1, "Hello Blazor!");
+            builder.CloseElement();
+        }
+    }
+
+    // Blazor Routing Example
+    public class BlazorRoutingExample : ComponentBase
     {
         [Parameter]
-        public string Id { get; set; }
+        public string CurrentRoute { get; set; }
 
         [Inject]
         private NavigationManager NavigationManager { get; set; }
     }
 
-    // Microsoft.AspNetCore.Components.Server Example
-    public class CircuitHandlerExample : CircuitHandler
+    // Blazor Server Example
+    public class BlazorServerExample
     {
-        public override Task OnCircuitOpenedAsync(Circuit circuit, CancellationToken cancellationToken)
+        public void ConfigureServices(IServiceCollection services)
         {
-            return Task.CompletedTask;
+            services.AddBlazorServer();
         }
     }
 
-    // Microsoft.AspNetCore.Components.WebAssembly Example
-    public class WasmExample
+    // Blazor WebAssembly Example
+    public class BlazorWebAssemblyExample
     {
-        public static async Task Main(string[] args)
+        public void ConfigureWebAssembly(WebAssemblyHostBuilder builder)
         {
-            var builder = WebAssemblyHostBuilder.CreateDefault(args);
+            builder.RootComponents.Add<App>("app");
+        }
+    }
+
+    // Blazor WebAssembly Authentication Example
+    public class BlazorWebAssemblyAuthExample
+    {
+        public void ConfigureAuth(WebAssemblyHostBuilder builder)
+        {
+            builder.Services.AddApiAuthorization();
+        }
+    }
+
+    // Blazor WebAssembly Hosting Example
+    public class BlazorWebAssemblyHostingExample
+    {
+        public static async Task RunBlazorApp()
+        {
+            var builder = WebAssemblyHostBuilder.CreateDefault();
             await builder.Build().RunAsync();
         }
     }
 
-    // Microsoft.JSInterop Example
-    public class JsInteropExample : ComponentBase
+    // Blazor WebAssembly Http Example
+    public class BlazorWebAssemblyHttpExample
+    {
+        private readonly HttpClient _http;
+
+        public async Task MakeAuthenticatedRequest()
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get, "api/data");
+            await _http.SendAsync(request);
+        }
+    }
+
+    // Blazor WebAssembly Infrastructure Example
+    public class BlazorWebAssemblyInfraExample
+    {
+        public void ConfigureInfrastructure(WebAssemblyHostBuilder builder)
+        {
+            builder.Services.AddBaseAddressHttpClient();
+        }
+    }
+
+    // Blazor WebAssembly Services Example
+    public class BlazorWebAssemblyServicesExample
+    {
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddBlazorWebAssemblyServices();
+        }
+    }
+
+    // Blazor DependencyInjection Example
+    public class BlazorDependencyInjectionExample
+    {
+        public void ConfigureDI(IServiceCollection services)
+        {
+            services.AddBlazorServices();
+        }
+    }
+
+    // Blazor JSInterop Example
+    public class BlazorJSInteropExample : ComponentBase
     {
         [Inject]
         private IJSRuntime JSRuntime { get; set; }
 
-        private async Task CallJavaScript()
+        public async Task InvokeJavaScript()
         {
-            await JSRuntime.InvokeVoidAsync("alert", "Hello from Blazor!");
-        }
-    }
-
-    // Microsoft.Extensions.DependencyInjection Example
-    public class ServiceExample
-    {
-        public static void ConfigureServices(IServiceCollection services)
-        {
-            services.AddScoped<IDataService, DataService>();
-            services.AddBlazorWebAssembly();
-        }
-    }
-
-    // Microsoft.Extensions.Logging Example
-    public class LoggingExample : ComponentBase
-    {
-        [Inject]
-        private ILogger<LoggingExample> Logger { get; set; }
-
-        private void LogMessage()
-        {
-            Logger.LogInformation("Component rendered at {time}", DateTime.UtcNow);
-        }
-    }
-
-    // System.Net.Http Example
-    public class HttpExample : ComponentBase
-    {
-        [Inject]
-        private HttpClient Http { get; set; }
-
-        private async Task FetchData()
-        {
-            var response = await Http.GetAsync("api/data");
-            var content = await response.Content.ReadAsStringAsync();
-        }
-    }
-
-    // System.Net.Http.Json Example
-    public class JsonExample : ComponentBase
-    {
-        [Inject]
-        private HttpClient Http { get; set; }
-
-        private async Task<WeatherForecast[]> GetForecastAsync()
-        {
-            return await Http.GetFromJsonAsync<WeatherForecast[]>("api/weather");
-        }
-    }
-
-    // System.Collections.Generic Example
-    public class StateExample : ComponentBase
-    {
-        private List<string> items = new List<string>();
-        private Dictionary<string, object> properties = new Dictionary<string, object>();
-
-        protected override void OnInitialized()
-        {
-            items.Add("Blazor Item");
-        }
-    }
-
-    // System.Threading.Tasks Example
-    public class AsyncExample : ComponentBase
-    {
-        private async Task LoadDataAsync()
-        {
-            await Task.Delay(1000); // Simulate loading
-            StateHasChanged();
-        }
-    }
-
-    // System Example
-    public class SystemExample : ComponentBase
-    {
-        private void BasicOperations()
-        {
-            DateTime now = DateTime.UtcNow;
-            Guid componentId = Guid.NewGuid();
-            string formatted = String.Format("Component: {0}", componentId);
-            TimeSpan renderTime = TimeSpan.FromMilliseconds(100);
+            await JSRuntime.InvokeVoidAsync("console.log", "Hello from Blazor!");
         }
     }
 }
