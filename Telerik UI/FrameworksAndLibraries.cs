@@ -1,217 +1,197 @@
-using System;
+using Telerik.Windows.Controls;
+using Telerik.Windows.Controls.Data;
+using Telerik.Windows.Controls.GridView;
+using Telerik.Windows.Controls.Chart;
+using Telerik.Windows.Controls.Scheduling;
+using Telerik.Windows.Controls.Navigation;
+using Telerik.Windows.Controls.Input;
+using Telerik.Windows.Controls.Docking;
+using Telerik.Windows.Controls.RichTextBox;
+using Telerik.Windows.Controls.Spreadsheet;
+using Telerik.Windows.Controls.GanttView;
+using Telerik.Windows.Controls.Map;
+using Telerik.Windows.Controls.DataVisualization;
+using Telerik.Windows.Documents.Core;
+using Telerik.Windows.Documents.Flow;
 
-namespace Telerik
+namespace TelerikExamples
 {
-    // Grid Component
-    using Telerik.Web.UI;
-    public class GridExample 
+    // Telerik.Windows.Controls Example
+    public class ControlsExample 
     {
-        private readonly RadGrid _grid = new RadGrid();
-        public void ConfigureGrid() 
+        private RadButton button;
+
+        public void InitializeButton()
         {
-            _grid.AllowPaging = true;
-            _grid.PageSize = 10;
-            _grid.AllowSorting = true;
-            _grid.DataSource = GetDataSource();
-            _grid.DataBind();
+            button = new RadButton();
+            button.Content = "Click Me";
         }
     }
 
-    // Chart Visualization
-    using Telerik.Charting;
-    public class ChartExample 
+    // Telerik.Windows.Controls.Data Example
+    public class DataExample
     {
-        private readonly RadChart _chart;
-        public void CreateChart() 
+        private RadDataForm dataForm;
+
+        public void ConfigureDataForm()
         {
-            _chart = new RadChart();
-            _chart.ChartTitle.Text = "Sales Report";
-            _chart.AddSeries(new ChartSeries("Monthly Sales"));
-            _chart.DataBind();
+            dataForm = new RadDataForm();
+            dataForm.AutoGenerateFields = true;
         }
     }
 
-    // Scheduler Component
-    using Telerik.Web.UI.Calendar;
-    public class SchedulerExample 
+    // Telerik.Windows.Controls.GridView Example
+    public class GridViewExample
     {
-        private readonly RadScheduler _scheduler;
-        public void ConfigureScheduler() 
+        private RadGridView grid;
+
+        public void SetupGrid()
         {
-            _scheduler = new RadScheduler();
-            _scheduler.SelectedView = SchedulerViewType.WeekView;
-            _scheduler.DayStartTime = "08:00";
-            _scheduler.DayEndTime = "18:00";
+            grid = new RadGridView();
+            grid.AutoGenerateColumns = true;
         }
     }
 
-    // Editor Control
-    using Telerik.Web.UI.Editor;
-    public class EditorExample 
+    // Telerik.Windows.Controls.Chart Example
+    public class ChartExample
     {
-        private readonly RadEditor _editor;
-        public void SetupEditor() 
+        private RadChartView chart;
+
+        public void CreateChart()
         {
-            _editor = new RadEditor();
-            _editor.Content = "Initial content";
-            _editor.ToolsFile = "~/EditorTools.xml";
-            _editor.EnableResize = true;
+            chart = new RadChartView();
+            chart.Series.Add(new LineSeries());
         }
     }
 
-    // Upload Component
-    using Telerik.Web.UI.Upload;
-    public class UploadExample 
+    // Telerik.Windows.Controls.Scheduling Example
+    public class SchedulingExample
     {
-        private readonly RadUpload _upload;
-        public void ConfigureUpload() 
+        private RadScheduleView scheduler;
+
+        public void InitializeScheduler()
         {
-            _upload = new RadUpload();
-            _upload.AllowedFileExtensions = ".pdf,.doc,.docx";
-            _upload.MaxFileSize = 10485760; // 10MB
-            _upload.MultipleFileSelection = true;
+            scheduler = new RadScheduleView();
+            scheduler.FirstDayOfWeek = DayOfWeek.Monday;
         }
     }
 
-    // Menu Navigation
-    using Telerik.Web.UI.Navigation;
-    public class MenuExample 
+    // Telerik.Windows.Controls.Navigation Example
+    public class NavigationExample
     {
-        private readonly RadMenu _menu;
-        public void CreateMenu() 
+        private RadTabControl tabControl;
+
+        public void ConfigureNavigation()
         {
-            _menu = new RadMenu();
-            _menu.EnableRoundedCorners = true;
-            _menu.EnableScreenBoundaryDetection = true;
-            _menu.LoadXmlFile("~/Menu.xml");
+            tabControl = new RadTabControl();
+            tabControl.Items.Add(new RadTabItem() { Header = "Tab 1" });
         }
     }
 
-    // Window Management
-    using Telerik.Web.UI.Windows;
-    public class WindowExample 
+    // Telerik.Windows.Controls.Input Example
+    public class InputExample
     {
-        private readonly RadWindow _window;
-        public void ShowWindow() 
+        private RadDatePicker datePicker;
+
+        public void SetupDatePicker()
         {
-            _window = new RadWindow();
-            _window.Title = "Dialog Window";
-            _window.Width = 500;
-            _window.Height = 300;
-            _window.Modal = true;
+            datePicker = new RadDatePicker();
+            datePicker.SelectedDate = DateTime.Today;
         }
     }
 
-    // PDF Processing
-    using Telerik.Windows.Documents.Fixed;
-    public class PdfExample 
+    // Telerik.Windows.Controls.Docking Example
+    public class DockingExample
     {
-        private readonly RadFixedDocument _document;
-        public void CreatePdf() 
+        private RadDocking docking;
+
+        public void ConfigureDocking()
         {
-            _document = new RadFixedDocument();
-            RadFixedPage page = _document.Pages.AddPage();
-            page.Size = new Size(792, 612); // Letter size
-            _document.Save("output.pdf");
+            docking = new RadDocking();
+            docking.DocumentHost.AddDocument(new RadDocument());
         }
     }
 
-    // Spreadsheet Processing
-    using Telerik.Windows.Documents.Spreadsheet;
-    public class SpreadsheetExample 
+    // Telerik.Windows.Controls.RichTextBox Example
+    public class RichTextBoxExample
     {
-        private readonly Workbook _workbook;
-        public void ManageSpreadsheet() 
+        private RadRichTextBox richTextBox;
+
+        public void InitializeEditor()
         {
-            _workbook = new Workbook();
-            Worksheet sheet = _workbook.Worksheets.Add();
-            sheet.Cells[0, 0].SetValue("Hello World");
-            _workbook.Save("output.xlsx");
+            richTextBox = new RadRichTextBox();
+            richTextBox.Document.DefaultStyleSettings.FontFamily = new System.Windows.Media.FontFamily("Arial");
         }
     }
 
-    // Report Processing
-    using Telerik.Reporting;
-    public class ReportExample 
+    // Telerik.Windows.Controls.Spreadsheet Example
+    public class SpreadsheetExample
     {
-        private readonly Report _report;
-        public void GenerateReport() 
+        private RadSpreadsheet spreadsheet;
+
+        public void SetupSpreadsheet()
         {
-            _report = new Report();
-            ReportParameter param = new ReportParameter();
-            param.Name = "DateRange";
-            _report.ReportParameters.Add(param);
-            _report.Export(new PdfReportProcessor());
+            spreadsheet = new RadSpreadsheet();
+            spreadsheet.CreateNewWorkbook();
         }
     }
 
-    // Data Access
-    using Telerik.Data.Core;
-    public class DataAccessExample 
+    // Telerik.Windows.Controls.GanttView Example
+    public class GanttViewExample
     {
-        private readonly DataSourceBuilder _builder;
-        public void ConfigureDataAccess() 
+        private RadGanttView ganttView;
+
+        public void ConfigureGantt()
         {
-            _builder = new DataSourceBuilder();
-            _builder.AddSort("Name", ListSortDirection.Ascending);
-            _builder.AddFilter("Age", FilterOperator.IsGreaterThan, 18);
+            ganttView = new RadGanttView();
+            ganttView.VisibleRange = new TimeSpan(30, 0, 0, 0);
         }
     }
 
-    // Image Processing
-    using Telerik.Windows.Media.Imaging;
-    public class ImageExample 
+    // Telerik.Windows.Controls.Map Example
+    public class MapExample
     {
-        private readonly RadBitmapImage _image;
-        public void ProcessImage() 
+        private RadMap map;
+
+        public void InitializeMap()
         {
-            _image = new RadBitmapImage();
-            _image.Load("input.jpg");
-            _image.Resize(800, 600);
-            _image.Save("output.jpg");
+            map = new RadMap();
+            map.Center = new Location(42.6977, 23.3219); // Sofia coordinates
         }
     }
 
-    // Map Visualization
-    using Telerik.Web.UI.Map;
-    public class MapExample 
+    // Telerik.Windows.Controls.DataVisualization Example
+    public class DataVisualizationExample
     {
-        private readonly RadMap _map;
-        public void ConfigureMap() 
+        private RadBulletGraph bulletGraph;
+
+        public void CreateBulletGraph()
         {
-            _map = new RadMap();
-            _map.Zoom = 4;
-            _map.Center = new MapPoint(40.7128, -74.0060);
-            _map.EnableMouseWheelZoom = true;
+            bulletGraph = new RadBulletGraph();
+            bulletGraph.Value = 75;
         }
     }
 
-    // Gauge Control
-    using Telerik.Web.UI.Gauges;
-    public class GaugeExample 
+    // Telerik.Windows.Documents.Core Example
+    public class DocumentsCoreExample
     {
-        private readonly RadRadialGauge _gauge;
-        public void SetupGauge() 
+        private DocumentFormat format;
+
+        public void SetDocumentFormat()
         {
-            _gauge = new RadRadialGauge();
-            _gauge.MinValue = 0;
-            _gauge.MaxValue = 100;
-            _gauge.Value = 75;
-            _gauge.ShowLabels = true;
+            format = DocumentFormat.Rtf;
         }
     }
 
-    // Barcode Generation
-    using Telerik.Web.UI.Barcode;
-    public class BarcodeExample 
+    // Telerik.Windows.Documents.Flow Example
+    public class DocumentsFlowExample
     {
-        private readonly RadBarcode _barcode;
-        public void GenerateBarcode() 
+        private RadFlowDocument flowDocument;
+
+        public void CreateDocument()
         {
-            _barcode = new RadBarcode();
-            _barcode.Type = BarcodeType.QRCode;
-            _barcode.Text = "https://www.telerik.com";
-            _barcode.Width = 200;
+            flowDocument = new RadFlowDocument();
+            flowDocument.AddParagraph().AddRun("Hello World");
         }
     }
 }

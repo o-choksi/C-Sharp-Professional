@@ -1,124 +1,267 @@
-using System;
+using Oracle.DataAccess.Client;
+using Oracle.DataAccess.Types;
+using Oracle.DataAccess.Diagnostics;
+using Oracle.DataAccess.Connection;
+using Oracle.DataAccess.Transaction;
+using Oracle.DataAccess.Command;
+using Oracle.DataAccess.Parameter;
+using Oracle.DataAccess.DataReader;
+using Oracle.DataAccess.DataAdapter;
+using Oracle.DataAccess.Bulk;
+using Oracle.DataAccess.Metadata;
+using Oracle.DataAccess.Notification;
+using Oracle.DataAccess.HA;
+using Oracle.DataAccess.Security;
+using Oracle.DataAccess.Logging;
+using Oracle.DataAccess.Caching;
+using Oracle.DataAccess.Failover;
+using Oracle.DataAccess.Performance;
+using Oracle.DataAccess.Monitoring;
+using Oracle.DataAccess.Configuration;
 
-namespace OracleDataAccess
+namespace OracleExamples
 {
-    // Basic database connectivity
-    using Oracle.DataAccess.Client;
-    public class ConnectionExample 
+    // Oracle.DataAccess.Client Example
+    public class ClientExample
     {
-        private readonly OracleConnection _connection = new OracleConnection();
-        public void ConfigureConnection() 
+        private OracleConnection connection;
+
+        public void CreateConnection()
         {
-            _connection.ConnectionString = "Data Source=ORCL;User Id=system;Password=password;";
-            _connection.Open();
+            connection = new OracleConnection("Data Source=MyOracleDB;User Id=myUsername;Password=myPassword;");
+            connection.Open();
         }
     }
 
-    // Command execution
-    using Oracle.DataAccess.CommandBuilder;
-    public class CommandExample 
+    // Oracle.DataAccess.Types Example
+    public class TypesExample
     {
-        private readonly OracleCommand _command = new OracleCommand();
-        public void ExecuteCommand() 
+        private OracleDecimal oracleDecimal;
+
+        public void HandleOracleTypes()
         {
-            _command.CommandText = "SELECT * FROM employees";
-            _command.ExecuteNonQuery();
+            oracleDecimal = new OracleDecimal(1234.56);
+            decimal regularDecimal = oracleDecimal.Value;
         }
     }
 
-    // Transaction management
-    using Oracle.DataAccess.Transaction;
-    public class TransactionExample 
+    // Oracle.DataAccess.Diagnostics Example
+    public class DiagnosticsExample
     {
-        private readonly OracleTransaction _transaction;
-        public void ManageTransaction(OracleConnection conn) 
+        private OracleTraceLevel traceLevel;
+
+        public void ConfigureDiagnostics()
         {
-            _transaction = conn.BeginTransaction();
-            _transaction.Commit();
+            traceLevel = OracleTraceLevel.All;
+            OracleTrace.TraceLevel = traceLevel;
         }
     }
 
-    // Data type handling
-    using Oracle.DataAccess.Types;
-    public class DataTypeExample 
+    // Oracle.DataAccess.Connection Example
+    public class ConnectionExample
     {
-        private readonly OracleDecimal _decimal = new OracleDecimal();
-        public void HandleTypes() 
+        private OracleConnectionStringBuilder builder;
+
+        public void BuildConnectionString()
         {
-            OracleDate date = OracleDate.GetSysDate();
-            OracleString str = new OracleString("Sample");
+            builder = new OracleConnectionStringBuilder();
+            builder.DataSource = "MyOracleDB";
+            builder.UserID = "myUsername";
         }
     }
 
-    // Bulk operations
-    using Oracle.DataAccess.Bulk;
-    public class BulkOperationsExample 
+    // Oracle.DataAccess.Transaction Example
+    public class TransactionExample
     {
-        private readonly OracleBulkCopy _bulkCopy = new OracleBulkCopy();
-        public void PerformBulkCopy() 
+        private OracleTransaction transaction;
+
+        public void ManageTransaction(OracleConnection conn)
         {
-            _bulkCopy.DestinationTableName = "target_table";
-            _bulkCopy.BatchSize = 1000;
+            transaction = conn.BeginTransaction();
+            transaction.Commit();
         }
     }
 
-    // XML data handling
-    using Oracle.DataAccess.XML;
-    public class XmlExample 
+    // Oracle.DataAccess.Command Example
+    public class CommandExample
     {
-        private readonly OracleXmlType _xml = new OracleXmlType();
-        public void ProcessXml(OracleConnection conn) 
+        private OracleCommand command;
+
+        public void ExecuteCommand()
         {
-            _xml.Stream = new System.IO.MemoryStream();
-            _xml.Save();
+            command = new OracleCommand();
+            command.CommandText = "SELECT * FROM Employees";
         }
     }
 
-    // LOB handling
-    using Oracle.DataAccess.LOB;
-    public class LobExample 
+    // Oracle.DataAccess.Parameter Example
+    public class ParameterExample
     {
-        private readonly OracleLob _lob;
-        public void ManageLob(OracleConnection conn) 
+        private OracleParameter parameter;
+
+        public void ConfigureParameter()
         {
-            OracleClob clob = new OracleClob(conn);
-            clob.Write(new byte[] { }, 0, 0);
+            parameter = new OracleParameter();
+            parameter.ParameterName = "EmpId";
+            parameter.Value = 1001;
         }
     }
 
-    // Parameter binding
-    using Oracle.DataAccess.Parameters;
-    public class ParameterExample 
+    // Oracle.DataAccess.DataReader Example
+    public class DataReaderExample
     {
-        private readonly OracleParameter _param = new OracleParameter();
-        public void ConfigureParameter() 
+        private OracleDataReader reader;
+
+        public void ReadData(OracleCommand cmd)
         {
-            _param.ParameterName = "p_employee_id";
-            _param.OracleDbType = OracleDbType.Int32;
+            reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                // Process data
+            }
         }
     }
 
-    // Database change notification
-    using Oracle.DataAccess.Notification;
-    public class NotificationExample 
+    // Oracle.DataAccess.DataAdapter Example
+    public class DataAdapterExample
     {
-        private readonly OracleChangeNotification _notification = new OracleChangeNotification();
-        public void SetupNotification() 
+        private OracleDataAdapter adapter;
+
+        public void UseDataAdapter()
         {
-            _notification.RegisterQuery("SELECT * FROM employees");
-            _notification.OnChange += (sender, args) => {Console.WriteLine("Data changed!");};
+            adapter = new OracleDataAdapter();
+            adapter.SelectCommand = new OracleCommand("SELECT * FROM Products");
         }
     }
 
-    // Distributed transactions
-    using Oracle.DataAccess.DTC;
-    public class DistributedTransactionExample 
+    // Oracle.DataAccess.Bulk Example
+    public class BulkExample
     {
-        private readonly OracleDistributedTransaction _dtc;
-        public void ManageDistributedTx(OracleConnection conn) 
+        private OracleBulkCopy bulkCopy;
+
+        public void PerformBulkCopy(OracleConnection conn)
         {
-            _dtc = conn.EnlistDistributedTransaction();
-            _dtc.Prepare();
+            bulkCopy = new OracleBulkCopy(conn);
+            bulkCopy.DestinationTableName = "BulkData";
+        }
+    }
+
+    // Oracle.DataAccess.Metadata Example
+    public class MetadataExample
+    {
+        private OracleSchemaReader schemaReader;
+
+        public void ReadSchema(OracleConnection conn)
+        {
+            schemaReader = new OracleSchemaReader(conn);
+            schemaReader.GetTables();
+        }
+    }
+
+    // Oracle.DataAccess.Notification Example
+    public class NotificationExample
+    {
+        private OracleNotificationRequest notification;
+
+        public void SetupNotification()
+        {
+            notification = new OracleNotificationRequest();
+            notification.Timeout = 10000;
+        }
+    }
+
+    // Oracle.DataAccess.HA Example
+    public class HAExample
+    {
+        private OracleHAEventArgs haEventArgs;
+
+        public void HandleHAEvent()
+        {
+            haEventArgs = new OracleHAEventArgs();
+            haEventArgs.Source = "Primary Database";
+        }
+    }
+
+    // Oracle.DataAccess.Security Example
+    public class SecurityExample
+    {
+        private OracleCredential credential;
+
+        public void SetCredentials()
+        {
+            credential = new OracleCredential("username", "password");
+        }
+    }
+
+    // Oracle.DataAccess.Logging Example
+    public class LoggingExample
+    {
+        private OracleLog log;
+
+        public void ConfigureLogging()
+        {
+            log = new OracleLog();
+            log.Level = OracleLogLevel.Detailed;
+        }
+    }
+
+    // Oracle.DataAccess.Caching Example
+    public class CachingExample
+    {
+        private OracleCache cache;
+
+        public void SetupCache()
+        {
+            cache = new OracleCache();
+            cache.MaxSize = 1000;
+        }
+    }
+
+    // Oracle.DataAccess.Failover Example
+    public class FailoverExample
+    {
+        private OracleFailoverEventArgs failoverArgs;
+
+        public void HandleFailover()
+        {
+            failoverArgs = new OracleFailoverEventArgs();
+            failoverArgs.FailoverType = FailoverType.Session;
+        }
+    }
+
+    // Oracle.DataAccess.Performance Example
+    public class PerformanceExample
+    {
+        private OraclePerformanceCounters perfCounters;
+
+        public void MonitorPerformance()
+        {
+            perfCounters = new OraclePerformanceCounters();
+            perfCounters.EnableCollection = true;
+        }
+    }
+
+    // Oracle.DataAccess.Monitoring Example
+    public class MonitoringExample
+    {
+        private OracleMonitor monitor;
+
+        public void SetupMonitoring()
+        {
+            monitor = new OracleMonitor();
+            monitor.StartMonitoring();
+        }
+    }
+
+    // Oracle.DataAccess.Configuration Example
+    public class ConfigurationExample
+    {
+        private OracleConfiguration config;
+
+        public void ConfigureSettings()
+        {
+            config = OracleConfiguration.Default;
+            config.CommandTimeout = 30;
         }
     }
 }

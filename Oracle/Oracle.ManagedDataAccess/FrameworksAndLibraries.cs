@@ -1,100 +1,198 @@
-using System;
+using Oracle.ManagedDataAccess.Client;
+using Oracle.ManagedDataAccess.Types;
+using Oracle.ManagedDataAccess.EntityFramework;
+using Oracle.ManagedDataAccess.WPF;
+using Oracle.ManagedDataAccess.Web;
+using Oracle.ManagedDataAccess.Json;
+using Oracle.ManagedDataAccess.Xml;
+using Oracle.ManagedDataAccess.Diagnostics;
+using Oracle.ManagedDataAccess.Logging;
+using Oracle.ManagedDataAccess.Security;
+using Oracle.ManagedDataAccess.Caching;
+using Oracle.ManagedDataAccess.Monitoring;
+using Oracle.ManagedDataAccess.Configuration;
+using Oracle.ManagedDataAccess.Performance;
+using Oracle.ManagedDataAccess.HA;
 
-namespace OracleManagedDataAccess
+namespace OracleExamples
 {
-    // Basic database connectivity
-    using Oracle.ManagedDataAccess.Client;
-    public class ConnectionExample 
+    // Oracle.ManagedDataAccess.Client Example
+    public class ClientExample
     {
-        private readonly OracleConnection _connection = new OracleConnection();
-        public void ConfigureConnection() 
+        private OracleConnection connection;
+
+        public void CreateConnection()
         {
-            _connection.ConnectionString = "Data Source=ORCL;User Id=system;Password=password;";
-            _connection.Open();
+            connection = new OracleConnection("Data Source=MyOracleDB;User Id=myUsername;Password=myPassword;");
+            connection.Open();
         }
     }
 
-    // Data reader operations
-    using Oracle.ManagedDataAccess.Types;
-    public class DataReaderExample 
+    // Oracle.ManagedDataAccess.Types Example
+    public class TypesExample
     {
-        private readonly OracleCommand _command = new OracleCommand();
-        public void ReadData(OracleConnection conn) 
+        private OracleDecimal oracleDecimal;
+
+        public void HandleOracleTypes()
         {
-            _command.Connection = conn;
-            _command.CommandText = "SELECT * FROM employees";
-            using (OracleDataReader reader = _command.ExecuteReader()) 
-            {
-                while (reader.Read()) 
-                {
-                    Console.WriteLine(reader["employee_name"].ToString());
-                }
-            }
+            oracleDecimal = new OracleDecimal(1234.56);
+            decimal regularDecimal = oracleDecimal.Value;
         }
     }
 
-    // Parameter binding with array binding
-    using Oracle.ManagedDataAccess.Client;
-    public class ArrayBindingExample 
+    // Oracle.ManagedDataAccess.EntityFramework Example
+    public class EntityFrameworkExample
     {
-        private readonly OracleCommand _command = new OracleCommand();
-        public void BindArrayParameters(OracleConnection conn) 
+        private OracleContext dbContext;
+
+        public void UseEntityFramework()
         {
-            int[] empIds = { 1, 2, 3, 4, 5 };
-            _command.Connection = conn;
-            _command.ArrayBindCount = empIds.Length;
-            _command.CommandText = "UPDATE employees SET salary = salary + 100 WHERE employee_id = :id";
-            _command.Parameters.Add(":id", OracleDbType.Int32).Value = empIds;
-            _command.ExecuteNonQuery();
+            dbContext = new OracleContext();
+            var query = dbContext.Employees.Where(e => e.Salary > 50000);
         }
     }
 
-    // Batch operations
-    using Oracle.ManagedDataAccess.Client;
-    public class BatchProcessingExample 
+    // Oracle.ManagedDataAccess.WPF Example
+    public class WPFExample
     {
-        private readonly OracleCommand _command = new OracleCommand();
-        public void ExecuteBatch(OracleConnection conn) 
+        private OracleDataProvider dataProvider;
+
+        public void ConfigureWPFBinding()
         {
-            _command.Connection = conn;
-            _command.AddToStatementCache = true;
-            
-            _command.CommandText = "INSERT INTO departments (id, name) VALUES (:1, :2)";
-            _command.Parameters.Add(":1", OracleDbType.Int32);
-            _command.Parameters.Add(":2", OracleDbType.Varchar2);
-            
-            for (int i = 1; i <= 100; i++) 
-            {
-                _command.Parameters[0].Value = i;
-                _command.Parameters[1].Value = $"Department {i}";
-                _command.ExecuteNonQuery();
-            }
+            dataProvider = new OracleDataProvider();
+            dataProvider.ConnectionString = "Data Source=MyOracleDB";
         }
     }
 
-    // PL/SQL ref cursor
-    using Oracle.ManagedDataAccess.Client;
-    public class RefCursorExample 
+    // Oracle.ManagedDataAccess.Web Example
+    public class WebExample
     {
-        private readonly OracleCommand _command = new OracleCommand();
-        public void FetchRefCursor(OracleConnection conn) 
+        private OracleWebProvider webProvider;
+
+        public void ConfigureWebAccess()
         {
-            _command.Connection = conn;
-            _command.CommandText = "BEGIN OPEN :result_cursor FOR SELECT * FROM employees; END;";
-            _command.CommandType = System.Data.CommandType.Text;
-            
-            OracleParameter resultCursor = new OracleParameter();
-            resultCursor.ParameterName = ":result_cursor";
-            resultCursor.OracleDbType = OracleDbType.RefCursor;
-            resultCursor.Direction = System.Data.ParameterDirection.Output;
-            _command.Parameters.Add(resultCursor);
-            
-            _command.ExecuteNonQuery();
-            OracleDataReader reader = ((OracleRefCursor)resultCursor.Value).GetDataReader();
-            while (reader.Read()) 
-            {
-                Console.WriteLine(reader["employee_name"].ToString());
-            }
+            webProvider = new OracleWebProvider();
+            webProvider.EnablePooling = true;
+        }
+    }
+
+    // Oracle.ManagedDataAccess.Json Example
+    public class JsonExample
+    {
+        private OracleJsonSerializer serializer;
+
+        public void HandleJson()
+        {
+            serializer = new OracleJsonSerializer();
+            serializer.SerializeObject(new { id = 1, name = "Test" });
+        }
+    }
+
+    // Oracle.ManagedDataAccess.Xml Example
+    public class XmlExample
+    {
+        private OracleXmlReader xmlReader;
+
+        public void ProcessXml()
+        {
+            xmlReader = new OracleXmlReader();
+            xmlReader.ReadXmlData("SELECT * FROM Employees FOR XML AUTO");
+        }
+    }
+
+    // Oracle.ManagedDataAccess.Diagnostics Example
+    public class DiagnosticsExample
+    {
+        private OracleTraceSource traceSource;
+
+        public void ConfigureDiagnostics()
+        {
+            traceSource = new OracleTraceSource();
+            traceSource.Switch.Level = SourceLevels.All;
+        }
+    }
+
+    // Oracle.ManagedDataAccess.Logging Example
+    public class LoggingExample
+    {
+        private OracleLogManager logManager;
+
+        public void ConfigureLogging()
+        {
+            logManager = new OracleLogManager();
+            logManager.EnableFileLogging("oracle_log.txt");
+        }
+    }
+
+    // Oracle.ManagedDataAccess.Security Example
+    public class SecurityExample
+    {
+        private OracleSecureConnection secureConn;
+
+        public void SetupSecureConnection()
+        {
+            secureConn = new OracleSecureConnection();
+            secureConn.EnableSSL = true;
+        }
+    }
+
+    // Oracle.ManagedDataAccess.Caching Example
+    public class CachingExample
+    {
+        private OracleResultCache resultCache;
+
+        public void ConfigureCache()
+        {
+            resultCache = new OracleResultCache();
+            resultCache.TimeToLive = TimeSpan.FromMinutes(30);
+        }
+    }
+
+    // Oracle.ManagedDataAccess.Monitoring Example
+    public class MonitoringExample
+    {
+        private OraclePerformanceMonitor monitor;
+
+        public void SetupMonitoring()
+        {
+            monitor = new OraclePerformanceMonitor();
+            monitor.EnableMetrics(MetricType.All);
+        }
+    }
+
+    // Oracle.ManagedDataAccess.Configuration Example
+    public class ConfigurationExample
+    {
+        private OracleConfiguration config;
+
+        public void ConfigureSettings()
+        {
+            config = OracleConfiguration.Default;
+            config.BindByName = true;
+        }
+    }
+
+    // Oracle.ManagedDataAccess.Performance Example
+    public class PerformanceExample
+    {
+        private OraclePerformanceCollector collector;
+
+        public void CollectMetrics()
+        {
+            collector = new OraclePerformanceCollector();
+            collector.StartCollection();
+        }
+    }
+
+    // Oracle.ManagedDataAccess.HA Example
+    public class HAExample
+    {
+        private OracleHAManager haManager;
+
+        public void ConfigureHA()
+        {
+            haManager = new OracleHAManager();
+            haManager.EnableFailover = true;
         }
     }
 }

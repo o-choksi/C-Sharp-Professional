@@ -1,141 +1,184 @@
-using System;
+using Progress.Corticon.Foundation;
+using Progress.Corticon.RuleEngine;
+using Progress.Corticon.RuleEngine.Entities;
+using Progress.Corticon.RuleEngine.Rules;
+using Progress.Corticon.RuleEngine.Vocabulary;
+using Progress.Corticon.RuleEngine.Execution;
+using Progress.Corticon.RuleEngine.Validation;
+using Progress.Corticon.RuleEngine.Deployment;
+using Progress.Corticon.RuleEngine.Logging;
+using Progress.Corticon.RuleEngine.Persistence;
+using Progress.Corticon.RuleEngine.Security;
+using Progress.Corticon.RuleEngine.Extensions;
+using Progress.Corticon.RuleEngine.Versioning;
+using Progress.Corticon.RuleEngine.Analytics;
+using Progress.Corticon.RuleEngine.Integration;
 
-namespace ProgressCorticon
+namespace CorticonExamples 
 {
-    // Rule Engine Configuration
-    using Progress.Corticon.Runtime;
-    public class RuleEngineExample 
+    // Progress.Corticon.Foundation Example
+    public class FoundationExample
     {
-        private readonly ICcServer _ruleEngine = new CcServerFactory().CreateCcServer();
-        public void ConfigureRuleEngine() 
+        private ICorticonRuntime runtime;
+
+        public void Initialize()
         {
-            _ruleEngine.AutoUpdateDatabase = true;
-            _ruleEngine.LoadRulesheet("PolicyRules.ers");
+            runtime = CorticonRuntimeFactory.CreateRuntime();
         }
     }
 
-    // Decision Service Execution
-    using Progress.Corticon.Runtime.Messages;
-    public class DecisionServiceExample 
+    // Progress.Corticon.RuleEngine Example
+    public class RuleEngineExample
     {
-        private readonly ICcServer _ruleEngine;
-        public void ExecuteRules(string payload) 
+        private ICcServer server;
+
+        public void ExecuteRules()
         {
-            ICcDataObject inputData = CcDataFactory.CreateCcDataObject(payload);
-            ICcResponse response = _ruleEngine.Execute(inputData);
-            foreach(Message msg in response.Messages) 
-            {
-                Console.WriteLine($"{msg.Severity}: {msg.Text}");
-            }
+            var decision = server.Execute("MyRuleset");
         }
     }
 
-    // Vocabulary Management
-    using Progress.Corticon.Runtime.Vocabulary;
-    public class VocabularyExample 
+    // Progress.Corticon.RuleEngine.Entities Example
+    public class EntityExample
     {
-        private readonly ICcVocabulary _vocabulary;
-        public void LoadVocabulary() 
+        private IEntity customer;
+
+        public void CreateEntity()
         {
-            _vocabulary = CcVocabularyFactory.CreateVocabulary("Business.ecore");
-            foreach(ICcEntity entity in _vocabulary.Entities) 
-            {
-                Console.WriteLine($"Entity: {entity.Name}");
-            }
+            customer = EntityFactory.CreateEntity("Customer");
+            customer.SetValue("name", "John Doe");
         }
     }
 
-    // Rule Flow Management
-    using Progress.Corticon.Runtime.Flow;
-    public class RuleFlowExample 
+    // Progress.Corticon.RuleEngine.Rules Example
+    public class RulesExample
     {
-        private readonly ICcRuleFlow _ruleFlow;
-        public void ExecuteRuleFlow() 
+        private IRulesheet rulesheet;
+
+        public void LoadRules()
         {
-            _ruleFlow = CcRuleFlowFactory.CreateRuleFlow("CustomerFlow.erf");
-            _ruleFlow.Execute();
-            ICcFlowResult results = _ruleFlow.GetResults();
+            rulesheet = RulesheetFactory.LoadRulesheet("CustomerRules.ers");
         }
     }
 
-    // Entity Validation
-    using Progress.Corticon.Runtime.Validation;
-    public class ValidationExample 
+    // Progress.Corticon.RuleEngine.Vocabulary Example
+    public class VocabularyExample
     {
-        private readonly ICcValidator _validator;
-        public void ValidateEntities(ICcEntity entity) 
+        private IVocabulary vocabulary;
+
+        public void LoadVocabulary()
         {
-            ValidationResults results = _validator.Validate(entity);
-            foreach(ValidationError error in results.Errors) 
-            {
-                Console.WriteLine($"Error: {error.Message}");
-            }
+            vocabulary = VocabularyFactory.LoadVocabulary("Business.ecore");
         }
     }
 
-    // Rule Testing
-    using Progress.Corticon.Runtime.Test;
-    public class RuleTestExample 
+    // Progress.Corticon.RuleEngine.Execution Example
+    public class ExecutionExample
     {
-        private readonly ICcTestSuite _testSuite;
-        public void RunTests() 
+        private IExecutionContext context;
+
+        public void ProcessRules()
         {
-            _testSuite = CcTestFactory.CreateTestSuite("BusinessRules.ert");
-            TestResults results = _testSuite.ExecuteTests();
-            Console.WriteLine($"Passed: {results.PassedTests}, Failed: {results.FailedTests}");
+            var result = context.Execute();
         }
     }
 
-    // Decision Service Deployment
-    using Progress.Corticon.Runtime.Deploy;
-    public class DeploymentExample 
+    // Progress.Corticon.RuleEngine.Validation Example
+    public class ValidationExample
     {
-        private readonly ICcDeployment _deployment;
-        public void DeployRules() 
+        private IValidator validator;
+
+        public void ValidateRules()
         {
-            _deployment = CcDeploymentFactory.CreateDeployment();
-            _deployment.AddRulesheet("PolicyRules.ers");
-            _deployment.Deploy("ProductionServer");
+            var issues = validator.ValidateRuleset("BusinessRules");
         }
     }
 
-    // Performance Monitoring
-    using Progress.Corticon.Runtime.Metrics;
-    public class MetricsExample 
+    // Progress.Corticon.RuleEngine.Deployment Example
+    public class DeploymentExample
     {
-        private readonly ICcMetrics _metrics;
-        public void TrackPerformance() 
+        private IDeploymentManager manager;
+
+        public void DeployRules()
         {
-            _metrics = CcMetricsFactory.CreateMetrics();
-            _metrics.StartTracking();
-            // Execute rules
-            MetricsReport report = _metrics.GenerateReport();
-            Console.WriteLine($"Average execution time: {report.AverageExecutionTime}ms");
+            manager.DeployRuleset("OrderProcessing.ers");
         }
     }
 
-    // Rule Version Control
-    using Progress.Corticon.Runtime.Version;
-    public class VersionControlExample 
+    // Progress.Corticon.RuleEngine.Logging Example
+    public class LoggingExample
     {
-        private readonly ICcVersionControl _versionControl;
-        public void ManageVersions() 
+        private ILogger logger;
+
+        public void LogRuleExecution()
         {
-            _versionControl = CcVersionFactory.CreateVersionControl();
-            _versionControl.CheckoutRules("BusinessRules");
-            _versionControl.CommitChanges("Updated policy rules");
+            logger.LogRuleTrace("Rule execution completed");
         }
     }
 
-    // Event Handling
-    using Progress.Corticon.Runtime.Events;
-    public class EventHandlingExample 
+    // Progress.Corticon.RuleEngine.Persistence Example
+    public class PersistenceExample
     {
-        private readonly ICcEventManager _eventManager;
-        public void HandleEvents() 
+        private IPersistenceManager persistence;
+
+        public void SaveRuleState()
         {
-            _eventManager = CcEventFactory.CreateEventManager();
-            _eventManager.Subscribe(EventType.RuleExecution, (sender, e) => {Console.WriteLine($"Rule executed: {e.RuleName}");});
+            persistence.SaveState("RuleState.xml");
+        }
+    }
+
+    // Progress.Corticon.RuleEngine.Security Example
+    public class SecurityExample
+    {
+        private ISecurityManager security;
+
+        public void SetupSecurity()
+        {
+            security.ApplyRulesetPermissions("OrderRules");
+        }
+    }
+
+    // Progress.Corticon.RuleEngine.Extensions Example
+    public class ExtensionsExample
+    {
+        private IExtensionManager extensions;
+
+        public void RegisterExtension()
+        {
+            extensions.RegisterCustomFunction("MyCustomFunction");
+        }
+    }
+
+    // Progress.Corticon.RuleEngine.Versioning Example
+    public class VersioningExample
+    {
+        private IVersionManager versions;
+
+        public void ManageVersions()
+        {
+            versions.CreateRulesetVersion("OrderRules", "2.0");
+        }
+    }
+
+    // Progress.Corticon.RuleEngine.Analytics Example
+    public class AnalyticsExample
+    {
+        private IAnalyticsEngine analytics;
+
+        public void GatherMetrics()
+        {
+            var metrics = analytics.GetRuleExecutionMetrics();
+        }
+    }
+
+    // Progress.Corticon.RuleEngine.Integration Example
+    public class IntegrationExample
+    {
+        private IIntegrationService integration;
+
+        public void ConnectExternalSystem()
+        {
+            integration.ConnectToDataSource("CRM");
         }
     }
 }

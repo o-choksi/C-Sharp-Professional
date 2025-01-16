@@ -1,128 +1,358 @@
+using NUnit.Framework;
+using NUnit.Framework.Constraints;
+using NUnit.Framework.Internal;
+using NUnit.Framework.Interfaces;
+using NUnit.Framework.Api;
 using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Linq;
+using System.IO;
 
-namespace NUnit
+namespace NUnitExamples
 {
-    // Basic Assertions
-    using NUnit.Framework;
-    public class BasicAssertionsExample 
+    // Basic Assertions Example
+    [TestFixture]
+    public class AssertionsExample
     {
-        private readonly Calculator _calculator = new Calculator();
         [Test]
-        public void TestAddition() 
+        public void BasicAssertions()
         {
-            Assert.That(_calculator.Add(2, 2), Is.EqualTo(4));
-            Assert.That(_calculator.Add(-1, 1), Is.Zero);
+            Assert.That(2 + 2, Is.EqualTo(4));
+            Assert.AreEqual(4, 2 + 2);
+            Assert.IsTrue(true);
+            Assert.IsFalse(false);
         }
     }
 
-    // Collection Assertions
-    using NUnit.Framework.Constraints;
-    public class CollectionAssertionsExample 
+    // Constraint Based Testing Example
+    [TestFixture]
+    public class ConstraintExample
     {
-        private readonly List<int> _numbers = new List<int> { 1, 2, 3 };
         [Test]
-        public void TestCollection() 
+        public void ConstraintTests()
         {
-            Assert.That(_numbers, Has.Member(2));
-            Assert.That(_numbers, Is.Ordered);
+            int[] numbers = { 1, 2, 3, 4, 5 };
+            Assert.That(numbers, Has.Length.EqualTo(5));
+            Assert.That(numbers, Is.All.GreaterThan(0));
         }
     }
 
-    // Legacy Exception Handling
-    using NUnit.Framework.Legacy;
-    public class LegacyExceptionExample 
+    // Async Testing Example
+    [TestFixture]
+    public class AsyncExample
     {
         [Test]
-        public void TestException() 
+        public async Task AsyncTest()
         {
-            Assert.Throws(typeof(DivideByZeroException), () => Divide(1, 0));
-            Assert.Catch<ArgumentException>(() => ProcessNegative(-1));
+            var result = await Task.FromResult(42);
+            Assert.That(result, Is.EqualTo(42));
         }
     }
 
-    // COM Interop Testing
-    using NUnit.Framework.Internal;
-    public class ComInteropExample 
+    // Setup and Teardown Example
+    [TestFixture]
+    public class SetupTeardownExample
     {
-        [Test]
-        public void TestComObject() 
+        [SetUp]
+        public void Setup()
         {
-            dynamic excel = Activator.CreateInstance(Type.GetTypeFromProgID("Excel.Application"));
-            Assert.That(excel, Is.Not.Null);
-            Marshal.ReleaseComObject(excel);
+            // Setup code
+        }
+
+        [TearDown]
+        public void Teardown()
+        {
+            // Cleanup code
+        }
+
+        [Test]
+        public void TestMethod()
+        {
+            Assert.Pass();
         }
     }
 
-    // Windows Forms Testing
-    using NUnit.Framework.Internal.Commands;
-    public class WinFormsExample 
+    // Parameterized Testing Example
+    [TestFixture]
+    public class ParameterizedExample
     {
-        private Form _testForm;
-        [Test, STAThread]
-        public void TestFormLoad() 
+        [TestCase(1, 2, 3)]
+        [TestCase(10, 20, 30)]
+        public void AddNumbers(int a, int b, int expected)
         {
-            _testForm = new Form();
-            Assert.That(_testForm.IsHandleCreated, Is.False);
-            _testForm.Show();
-            Assert.That(_testForm.IsHandleCreated, Is.True);
+            Assert.That(a + b, Is.EqualTo(expected));
         }
     }
 
-    // Registry Access Testing
-    using NUnit.Framework.Internal.Execution;
-    public class RegistryExample 
+    // Category Example
+    [TestFixture]
+    public class CategoryExample
     {
         [Test]
-        public void TestRegistryAccess() 
+        [Category("Integration")]
+        public void IntegrationTest()
         {
-            using (RegistryKey key = Registry.CurrentUser.OpenSubKey("Software"))
+            Assert.Pass();
+        }
+    }
+
+    // Exception Testing Example
+    [TestFixture]
+    public class ExceptionExample
+    {
+        [Test]
+        public void ExceptionTest()
+        {
+            Assert.Throws<ArgumentException>(() => throw new ArgumentException());
+        }
+    }
+
+    // Collection Testing Example
+    [TestFixture]
+    public class CollectionExample
+    {
+        [Test]
+        public void CollectionTest()
+        {
+            var list = new List<int> { 1, 2, 3 };
+            Assert.That(list, Contains.Item(2));
+            Assert.That(list, Is.Ordered);
+        }
+    }
+
+    // Range Testing Example
+    [TestFixture]
+    public class RangeExample
+    {
+        [Test]
+        public void RangeTest()
+        {
+            Assert.That(5, Is.InRange(1, 10));
+        }
+    }
+
+    // String Testing Example
+    [TestFixture]
+    public class StringExample
+    {
+        [Test]
+        public void StringTest()
+        {
+            Assert.That("Hello World", Does.Contain("World"));
+            Assert.That("Hello", Is.Not.Empty);
+        }
+    }
+
+    // Timeout Example
+    [TestFixture]
+    public class TimeoutExample
+    {
+        [Test, Timeout(1000)]
+        public void TimeoutTest()
+        {
+            // Test with timeout
+            System.Threading.Thread.Sleep(500);
+        }
+    }
+
+    // Combinatorial Testing Example
+    [TestFixture]
+    public class CombinatorialExample
+    {
+        [Test]
+        public void CombinatorialTest(
+            [Values(1, 2)] int x,
+            [Values("A", "B")] string y)
+        {
+            Assert.Pass();
+        }
+    }
+
+    // Ignore Example
+    [TestFixture]
+    public class IgnoreExample
+    {
+        [Test]
+        [Ignore("Reason for ignoring")]
+        public void IgnoredTest()
+        {
+            Assert.Pass();
+        }
+    }
+
+    // Repeat Example
+    [TestFixture]
+    public class RepeatExample
+    {
+        [Test]
+        [Repeat(3)]
+        public void RepeatedTest()
+        {
+            Assert.Pass();
+        }
+    }
+
+    // Random Testing Example
+    [TestFixture]
+    public class RandomExample
+    {
+        [Test]
+        public void RandomTest()
+        {
+            var random = TestContext.CurrentContext.Random;
+            var number = random.Next(1, 100);
+            Assert.That(number, Is.InRange(1, 100));
+        }
+    }
+
+    // File Testing Example
+    [TestFixture]
+    public class FileExample
+    {
+        [Test]
+        public void FileTest()
+        {
+            var path = "test.txt";
+            Assert.That(File.Exists(path));
+        }
+    }
+
+    // Parallel Testing Example
+    [TestFixture]
+    public class ParallelExample
+    {
+        [Test, Parallelizable]
+        public void ParallelTest1()
+        {
+            Assert.Pass();
+        }
+
+        [Test, Parallelizable]
+        public void ParallelTest2()
+        {
+            Assert.Pass();
+        }
+    }
+
+    // Theory Example
+    [TestFixture]
+    public class TheoryExample
+    {
+        [Theory]
+        public void TheoryTest(
+            [Range(1, 3)] int x,
+            [Range(4, 6)] int y)
+        {
+            Assert.That(x + y, Is.GreaterThan(0));
+        }
+    }
+
+    // Custom Constraint Example
+    [TestFixture]
+    public class CustomConstraintExample
+    {
+        public class EvenConstraint : Constraint
+        {
+            public override ConstraintResult ApplyTo<TActual>(TActual actual)
             {
-                Assert.That(key, Is.Not.Null);
+                if (actual is int number)
+                {
+                    return new ConstraintResult(this, actual, number % 2 == 0);
+                }
+                return new ConstraintResult(this, actual, false);
             }
         }
+
+        [Test]
+        public void CustomConstraintTest()
+        {
+            Assert.That(2, new EvenConstraint());
+        }
     }
 
-    // Legacy Database Testing
-    using NUnit.Framework.Internal.Filters;
-    public class LegacyDatabaseExample 
+    // Data Driven Testing Example
+    [TestFixture]
+    public class DataDrivenExample
     {
-        [Test]
-        public void TestOleDbConnection() 
+        public static IEnumerable<TestCaseData> TestCases
         {
-            using (OleDbConnection conn = new OleDbConnection("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=legacy.mdb"))
+            get
             {
-                Assert.That(conn.State, Is.EqualTo(ConnectionState.Closed));
-                conn.Open();
-                Assert.That(conn.State, Is.EqualTo(ConnectionState.Open));
+                yield return new TestCaseData(1, 2).Returns(3);
+                yield return new TestCaseData(10, 20).Returns(30);
             }
         }
-    }
 
-    // ActiveX Control Testing
-    using NUnit.Framework.Internal.Builders;
-    public class ActiveXExample 
-    {
-        [Test]
-        public void TestActiveXControl() 
+        [Test, TestCaseSource("TestCases")]
+        public int DataDrivenTest(int a, int b)
         {
-            Type axType = Type.GetTypeFromProgID("MSComCtl2.MonthView");
-            Assert.That(axType, Is.Not.Null);
-            dynamic ctrl = Activator.CreateInstance(axType);
-            Assert.That(ctrl, Is.Not.Null);
+            return a + b;
         }
     }
 
-    // Legacy XML Testing
-    using NUnit.Framework.Interfaces;
-    public class LegacyXmlExample 
+    // Ordered Test Example
+    [TestFixture, Order(1)]
+    public class OrderedTestExample
+    {
+        [Test, Order(1)]
+        public void FirstTest()
+        {
+            Assert.Pass();
+        }
+
+        [Test, Order(2)]
+        public void SecondTest()
+        {
+            Assert.Pass();
+        }
+    }
+
+    // Platform Specific Example
+    [TestFixture]
+    public class PlatformSpecificExample
     {
         [Test]
-        public void TestXmlDataDocument() 
+        [Platform(Include = "Win")]
+        public void WindowsOnlyTest()
         {
-            XmlDataDocument xmlDoc = new XmlDataDocument();
-            DataSet ds = new DataSet();
-            xmlDoc.DataSet = ds;
-            Assert.That(xmlDoc.DataSet, Is.SameAs(ds));
+            Assert.Pass();
+        }
+    }
+
+    // Explicit Test Example
+    [TestFixture]
+    public class ExplicitExample
+    {
+        [Test, Explicit]
+        public void ExplicitTest()
+        {
+            Assert.Pass();
+        }
+    }
+
+    // Culture Specific Example
+    [TestFixture]
+    public class CultureSpecificExample
+    {
+        [Test]
+        [Culture("en-US")]
+        public void CultureSpecificTest()
+        {
+            Assert.Pass();
+        }
+    }
+
+    // MaxTime Example
+    [TestFixture]
+    public class MaxTimeExample
+    {
+        [Test]
+        [MaxTime(1000)]
+        public void MaxTimeTest()
+        {
+            System.Threading.Thread.Sleep(500);
+            Assert.Pass();
         }
     }
 }
