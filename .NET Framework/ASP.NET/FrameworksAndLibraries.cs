@@ -1,11 +1,9 @@
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.IO;
 using System.Net;
-using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Web;
@@ -31,24 +29,6 @@ namespace ASPNet
             Uri url = new Uri("http://example.com");
             Version version = new Version(1, 0);
             Random random = new Random();
-        }
-    }
-
-    // System.Collections.Generic Examples
-    public class CollectionsExamples
-    {
-        public void CollectionTypes()
-        {
-            List<string> list = new List<string>();
-            Dictionary<int, string> dict = new Dictionary<int, string>();
-            Queue<int> queue = new Queue<int>();
-            Stack<double> stack = new Stack<double>();
-            HashSet<string> set = new HashSet<string>();
-            LinkedList<int> linked = new LinkedList<int>();
-            SortedList<string, int> sorted = new SortedList<string, int>();
-            SortedDictionary<int, string> sortedDict = new SortedDictionary<int, string>();
-            SortedSet<int> sortedSet = new SortedSet<int>();
-            KeyValuePair<string, int> pair = new KeyValuePair<string, int>("key", 1);
         }
     }
 
@@ -139,24 +119,6 @@ namespace ASPNet
             Cookie cookie = new Cookie("name", "value");
             SocketAddress addr = new SocketAddress(AddressFamily.InterNetwork);
             NetworkStream netStream = null;
-        }
-    }
-
-    // System.Security.Cryptography Examples
-    public class CryptoExamples
-    {
-        public void CryptoOperations()
-        {
-            MD5 md5 = MD5.Create();
-            SHA256 sha256 = SHA256.Create();
-            RSA rsa = RSA.Create();
-            AES aes = AES.Create();
-            HMAC hmac = HMAC.Create();
-            TripleDES des3 = TripleDES.Create();
-            DSA dsa = DSA.Create();
-            RandomNumberGenerator rng = RandomNumberGenerator.Create();
-            CryptoStream cryptoStream = null;
-            HashAlgorithm hash = SHA1.Create();
         }
     }
 
