@@ -14,7 +14,7 @@ using Progress.Corticon.RuleEngine.Versioning;
 using Progress.Corticon.RuleEngine.Analytics;
 using Progress.Corticon.RuleEngine.Integration;
 
-namespace CorticonExamples 
+namespace ProgressCorticon
 {
     // Progress.Corticon.Foundation Example
     public class FoundationExample

@@ -19,7 +19,7 @@ using Oracle.DataAccess.Performance;
 using Oracle.DataAccess.Monitoring;
 using Oracle.DataAccess.Configuration;
 
-namespace OracleExamples
+namespace OracleDataAccess
 {
     // Oracle.DataAccess.Client Example
     public class ClientExample

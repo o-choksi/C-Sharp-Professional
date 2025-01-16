@@ -1,145 +1,187 @@
 using System;
+using System.Web.Services;
+using System.Web.Services.Protocols;
+using System.Web.Services.Description;
+using System.Web.Services.Discovery;
+using System.Web.Services.Configuration;
+using System.EnterpriseServices;
+using System.Xml.Serialization;
+using System.ComponentModel;
 
 namespace WebMethods
 {
-    // Basic Web Method
-    using System.Web.Services;
-    public class BasicWebService
+    // Basic SOAP Web Method
+    public class BasicSoapWebService 
     {
         [WebMethod]
-        public string HelloWorld()
+        public string GetMessage()
         {
-            return "Hello, World!";
+            return "Basic SOAP web method";
         }
     }
 
-    // Web Method with Parameters
-    using System.Web.Services;
-    public class ParameterizedWebService
+    // Web Method with SOAP Headers
+    public class SoapHeaderWebService
     {
-        [WebMethod]
-        public int Add(int x, int y)
+        public class AuthenticationHeader : SoapHeader
         {
-            return x + y;
-        }
-    }
-
-    // Web Method with Complex Type
-    using System.Web.Services;
-    public class ComplexTypeWebService
-    {
-        [WebMethod]
-        public Customer GetCustomer(int id)
-        {
-            return new Customer { Id = id, Name = "John Doe" };
-        }
-
-        public class Customer
-        {
-            public int Id { get; set; }
-            public string Name { get; set; }
-        }
-    }
-
-    // Web Method with Session State
-    using System.Web.Services;
-    public class SessionWebService
-    {
-        [WebMethod(EnableSession = true)]
-        public void StoreInSession(string key, string value)
-        {
-            System.Web.HttpContext.Current.Session[key] = value;
-        }
-    }
-
-    // Web Method with Cache
-    using System.Web.Services;
-    public class CachedWebService
-    {
-        [WebMethod(CacheDuration = 60)]
-        public string GetCachedData()
-        {
-            return "This result will be cached for 60 seconds";
-        }
-    }
-
-    // Web Method with Authentication
-    using System.Web.Services;
-    public class SecureWebService
-    {
-        [WebMethod]
-        [System.Web.Services.Protocols.SoapHeader("Credentials")]
-        public string GetSecureData()
-        {
-            return "Secure data";
-        }
-    }
-
-    // Web Method with Transaction
-    using System.Web.Services;
-    using System.EnterpriseServices;
-    public class TransactionalWebService
-    {
-        [WebMethod]
-        [Transaction(TransactionOption.Required)]
-        public void PerformTransaction()
-        {
-            // Transaction logic here
-        }
-    }
-
-    // Web Method with Custom SOAP Headers
-    using System.Web.Services;
-    using System.Web.Services.Protocols;
-    public class CustomHeaderWebService
-    {
-        public class AuthHeader : SoapHeader
-        {
-            public string Username { get; set; }
-            public string Password { get; set; }
+            public string Token { get; set; }
         }
 
         [WebMethod]
-        [SoapHeader("AuthHeader")]
-        public string AuthenticatedMethod()
+        [SoapHeader("Authentication")]
+        public string SecureOperation()
         {
-            return "Authenticated response";
+            return "Authenticated operation";
         }
     }
 
-    // Web Method with Async Pattern
-    using System.Web.Services;
-    public class AsyncWebService
+    // Web Method with SOAP Extensions
+    public class SoapExtensionWebService
     {
         [WebMethod]
-        public IAsyncResult BeginOperation(AsyncCallback callback, object state)
+        [SoapDocumentMethod(ParameterStyle = SoapParameterStyle.Bare)]
+        public string ExtendedOperation()
         {
-            // Async operation logic
-            return null;
-        }
-
-        [WebMethod]
-        public void EndOperation(IAsyncResult result)
-        {
-            // Complete async operation
+            return "Extended SOAP operation";
         }
     }
 
-    // Web Method with Description
-    using System.Web.Services;
-    using System.ComponentModel;
-    public class DocumentedWebService
+    // Web Method with Service Description
+    [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
+    public class ServiceDescriptionWebService
     {
-        [WebMethod(Description = "This method performs an important operation")]
-        [System.Xml.Serialization.XmlInclude(typeof(OperationResult))]
-        public OperationResult PerformOperation()
+        [WebMethod]
+        public string DescribedOperation()
         {
-            return new OperationResult { Success = true };
+            return "Operation with WSDL description";
+        }
+    }
+
+    // Web Method with Discovery
+    [WebServiceAttribute(Description="Discoverable Service")]
+    public class DiscoveryWebService
+    {
+        [WebMethod]
+        public string DiscoverableOperation()
+        {
+            return "Discoverable operation";
+        }
+    }
+
+    // Web Method with Protocol Configuration
+    [WebService(Protocol=WebServiceProtocols.HttpPost)]
+    public class ProtocolConfigWebService
+    {
+        [WebMethod]
+        public string ConfiguredOperation()
+        {
+            return "Protocol configured operation";
+        }
+    }
+
+    // Web Method with SOAP Document Style
+    [WebService(Description="Document Style Service")]
+    public class DocumentStyleWebService
+    {
+        [WebMethod]
+        [SoapDocumentMethod(Use=SoapBindingUse.Literal)]
+        public string DocumentOperation()
+        {
+            return "Document style operation";
+        }
+    }
+
+    // Web Method with Message Contract
+    public class MessageContractWebService
+    {
+        [WebMethod]
+        [SoapDocumentMethod(Action="urn:MessageAction")]
+        public string MessageOperation()
+        {
+            return "Message contract operation";
+        }
+    }
+
+    // Web Method with Custom Serialization
+    public class SerializationWebService
+    {
+        [WebMethod]
+        [XmlSerializerFormat]
+        public CustomData GetCustomData()
+        {
+            return new CustomData { Value = "Serialized data" };
         }
 
-        public class OperationResult
+        public class CustomData
         {
-            public bool Success { get; set; }
+            public string Value { get; set; }
+        }
+    }
+
+    // Web Method with Protocol Reflection
+    public class ProtocolReflectionWebService
+    {
+        [WebMethod]
+        [SoapRpcMethod]
+        public string ReflectionOperation()
+        {
+            return "Protocol reflection operation";
+        }
+    }
+
+    // Web Method with Service Behavior
+    [WebServiceBinding(EmitConformanceClaims = true)]
+    public class ServiceBehaviorWebService
+    {
+        [WebMethod]
+        public string BehaviorOperation()
+        {
+            return "Service behavior operation";
+        }
+    }
+
+    // Web Method with SOAP Fault Contract
+    public class FaultContractWebService
+    {
+        [WebMethod]
+        [SoapDocumentMethod(ResponseElementName="FaultResponse")]
+        public string FaultOperation()
+        {
+            return "Fault contract operation";
+        }
+    }
+
+    // Web Method with Service Configuration
+    [WebService(Namespace = "http://tempuri.org/")]
+    public class ServiceConfigWebService
+    {
+        [WebMethod]
+        public string ConfigOperation()
+        {
+            return "Service configuration operation";
+        }
+    }
+
+    // Web Method with Protocol Mapping
+    public class ProtocolMappingWebService
+    {
+        [WebMethod]
+        [SoapDocumentMethod(RequestNamespace="http://tempuri.org/")]
+        public string MappingOperation()
+        {
+            return "Protocol mapping operation";
+        }
+    }
+
+    // Web Method with Service Reference
+    public class ServiceReferenceWebService
+    {
+        [WebMethod]
+        [WebServiceBinding(Name="ReferenceBinding")]
+        public string ReferenceOperation()
+        {
+            return "Service reference operation";
         }
     }
 }

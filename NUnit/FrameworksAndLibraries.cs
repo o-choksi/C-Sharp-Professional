@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using System.IO;
 
-namespace NUnitExamples
+namespace NUnit
 {
     // Basic Assertions Example
     [TestFixture]

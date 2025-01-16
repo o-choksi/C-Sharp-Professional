@@ -14,7 +14,7 @@ using Telerik.Windows.Controls.DataVisualization;
 using Telerik.Windows.Documents.Core;
 using Telerik.Windows.Documents.Flow;
 
-namespace TelerikExamples
+namespace Telerik
 {
     // Telerik.Windows.Controls Example
     public class ControlsExample 

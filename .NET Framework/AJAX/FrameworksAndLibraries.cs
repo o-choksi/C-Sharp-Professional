@@ -1,313 +1,134 @@
-using System;
-using System.Web.UI.WebControls;
-using System.Web.UI.HtmlControls;
+using System.Web.Ajax;
+using System.Web.Mvc.Ajax;
+using System.Web.UI.AjaxControlToolkit;
+using Microsoft.Ajax.Utilities;
+using Microsoft.Web.Ajax;
+using Microsoft.Web.Ajax.Controls;
+using Microsoft.Web.Ajax.Behaviors;
+using Microsoft.Web.Ajax.Extensions;
+using Microsoft.Web.Ajax.Services;
+using Microsoft.Web.Ajax.UI;
 
-namespace AJAXControls
+namespace Ajax
 {
-    // UpdatePanel Control
-    public class UpdatePanelExample
+    public class WebMethodExample
     {
-        protected UpdatePanel updatePanel1;
-        protected Timer timer1;
-
-        private void InitializeControls()
+        [WebMethod]
+        public static string GetServerTime()
         {
-            updatePanel1 = new UpdatePanel
+            return DateTime.Now.ToString();
+        }
+    }
+
+    public class AjaxControlExample
+    {
+        public void ConfigureAjaxControl()
+        {
+            var control = new AjaxControl
             {
+                ID = "ajaxControl1",
+                EnableViewState = false,
                 UpdateMode = UpdatePanelUpdateMode.Conditional
             };
-            timer1 = new Timer { Interval = 5000 };
         }
     }
 
-    // ScriptManager Control
-    public class ScriptManagerExample 
+    public class AjaxBehaviorExample
     {
-        protected ScriptManager scriptManager1;
-
-        private void InitializeControls()
+        public void ConfigureBehavior()
         {
-            scriptManager1 = new ScriptManager
+            var behavior = new AjaxBehavior
             {
                 EnablePartialRendering = true,
-                AsyncPostBackTimeout = 90
+                PostBackUrl = "~/Handler.ashx",
+                OnComplete = "handleComplete"
             };
         }
     }
 
-    // Timer Control
-    public class TimerExample
+    public class AjaxExtensionExample
     {
-        protected Timer timer1;
-
-        private void InitializeControls()
+        public void ConfigureExtension()
         {
-            timer1 = new Timer
+            var extension = new AjaxExtension
             {
-                Interval = 1000,
-                Enabled = true
+                TargetControlID = "mainContent",
+                EnableCaching = true,
+                CacheDuration = 300
             };
         }
     }
 
-    // AsyncPostBackTrigger
-    public class AsyncTriggerExample
+    public class AjaxServiceExample
     {
-        protected UpdatePanel updatePanel1;
-        protected Button button1;
-
-        private void SetupTriggers()
+        [WebService(Namespace = "http://tempuri.org/")]
+        public class MyAjaxService : System.Web.Services.WebService
         {
-            AsyncPostBackTrigger trigger = new AsyncPostBackTrigger
+            [WebMethod]
+            public string ProcessData(string input)
             {
-                ControlID = "button1",
-                EventName = "Click"
-            };
-            updatePanel1.Triggers.Add(trigger);
+                return $"Processed: {input}";
+            }
         }
     }
 
-    // PostBackTrigger
-    public class PostBackTriggerExample
+    public class AjaxUIExample
     {
-        protected UpdatePanel updatePanel1;
-        protected FileUpload fileUpload1;
-
-        private void SetupTriggers()
+        public void ConfigureUI()
         {
-            PostBackTrigger trigger = new PostBackTrigger
+            var uiElement = new AjaxUIControl
             {
-                ControlID = "fileUpload1"
-            };
-            updatePanel1.Triggers.Add(trigger);
-        }
-    }
-
-    // UpdateProgress Control
-    public class UpdateProgressExample
-    {
-        protected UpdateProgress updateProgress1;
-
-        private void InitializeControls()
-        {
-            updateProgress1 = new UpdateProgress
-            {
-                DisplayAfter = 500,
-                DynamicLayout = true
+                Visible = true,
+                EnableTheming = true,
+                Theme = "Modern"
             };
         }
     }
 
-    // Ajax Control Toolkit TabContainer
-    public class TabContainerExample
+    public class AjaxUtilitiesExample
     {
-        protected AjaxControlToolkit.TabContainer tabContainer1;
-
-        private void InitializeControls()
+        public string MinifyContent()
         {
-            tabContainer1 = new AjaxControlToolkit.TabContainer
-            {
-                ActiveTabIndex = 0,
-                AutoPostBack = true
-            };
+            var minifier = new Minifier();
+            return minifier.MinifyJavaScript("function test() { alert('Hello'); }");
         }
     }
 
-    // Ajax Control Toolkit Accordion
-    public class AccordionExample
+    public class AjaxControlToolkitExample
     {
-        protected AjaxControlToolkit.Accordion accordion1;
-
-        private void InitializeControls()
+        public void ConfigureToolkit()
         {
-            accordion1 = new AjaxControlToolkit.Accordion
-            {
-                HeaderSelectedCssClass = "accordionHeaderSelected",
-                ContentCssClass = "accordionContent"
-            };
-        }
-    }
-
-    // Ajax Control Toolkit Modal Popup
-    public class ModalPopupExample
-    {
-        protected AjaxControlToolkit.ModalPopupExtender modalPopup1;
-
-        private void InitializeControls()
-        {
-            modalPopup1 = new AjaxControlToolkit.ModalPopupExtender
-            {
-                TargetControlID = "btnShow",
-                PopupControlID = "pnlPopup",
-                BackgroundCssClass = "modalBackground"
-            };
-        }
-    }
-
-    // Ajax Control Toolkit Calendar
-    public class CalendarExample
-    {
-        protected AjaxControlToolkit.CalendarExtender calendar1;
-
-        private void InitializeControls()
-        {
-            calendar1 = new AjaxControlToolkit.CalendarExtender
+            var calendar = new CalendarExtender
             {
                 TargetControlID = "txtDate",
-                Format = "MM/dd/yyyy"
+                Format = "dd/MM/yyyy",
+                PopupButtonID = "imgCalendar"
             };
         }
     }
 
-    // Ajax Control Toolkit AutoComplete
-    public class AutoCompleteExample
+    public class MvcAjaxExample
     {
-        protected AjaxControlToolkit.AutoCompleteExtender autoComplete1;
-
-        private void InitializeControls()
+        public AjaxOptions ConfigureAjaxOptions()
         {
-            autoComplete1 = new AjaxControlToolkit.AutoCompleteExtender
+            return new AjaxOptions
             {
-                TargetControlID = "txtSearch",
-                ServiceMethod = "GetCompletionList",
-                MinimumPrefixLength = 1
+                InsertionMode = InsertionMode.Replace,
+                UpdateTargetId = "resultDiv",
+                LoadingElementId = "loading"
             };
         }
     }
 
-    // Ajax Control Toolkit Rating
-    public class RatingExample
+    public class WebAjaxExample
     {
-        protected AjaxControlToolkit.Rating rating1;
-
-        private void InitializeControls()
+        public void ConfigureWebAjax()
         {
-            rating1 = new AjaxControlToolkit.Rating
+            var handler = new AjaxRequestHandler
             {
-                CurrentRating = 3,
-                MaxRating = 5,
-                StarCssClass = "ratingStar"
-            };
-        }
-    }
-
-    // Ajax Control Toolkit Slider
-    public class SliderExample
-    {
-        protected AjaxControlToolkit.SliderExtender slider1;
-
-        private void InitializeControls()
-        {
-            slider1 = new AjaxControlToolkit.SliderExtender
-            {
-                Minimum = 0,
-                Maximum = 100,
-                Steps = 5
-            };
-        }
-    }
-
-    // Ajax Control Toolkit ColorPicker
-    public class ColorPickerExample
-    {
-        protected AjaxControlToolkit.ColorPickerExtender colorPicker1;
-
-        private void InitializeControls()
-        {
-            colorPicker1 = new AjaxControlToolkit.ColorPickerExtender
-            {
-                TargetControlID = "txtColor",
-                PopupButtonID = "btnColor"
-            };
-        }
-    }
-
-    // Ajax Control Toolkit MaskedEdit
-    public class MaskedEditExample
-    {
-        protected AjaxControlToolkit.MaskedEditExtender maskedEdit1;
-
-        private void InitializeControls()
-        {
-            maskedEdit1 = new AjaxControlToolkit.MaskedEditExtender
-            {
-                TargetControlID = "txtPhone",
-                Mask = "(999) 999-9999"
-            };
-        }
-    }
-
-    // Ajax Control Toolkit PasswordStrength
-    public class PasswordStrengthExample
-    {
-        protected AjaxControlToolkit.PasswordStrength passwordStrength1;
-
-        private void InitializeControls()
-        {
-            passwordStrength1 = new AjaxControlToolkit.PasswordStrength
-            {
-                TargetControlID = "txtPassword",
-                DisplayPosition = AjaxControlToolkit.DisplayPosition.RightSide
-            };
-        }
-    }
-
-    // Ajax Control Toolkit HtmlEditor
-    public class HtmlEditorExample
-    {
-        protected AjaxControlToolkit.HtmlEditorExtender htmlEditor1;
-
-        private void InitializeControls()
-        {
-            htmlEditor1 = new AjaxControlToolkit.HtmlEditorExtender
-            {
-                TargetControlID = "txtContent",
-                DisplaySourceTab = true
-            };
-        }
-    }
-
-    // Ajax Control Toolkit DragPanel
-    public class DragPanelExample
-    {
-        protected AjaxControlToolkit.DragPanelExtender dragPanel1;
-
-        private void InitializeControls()
-        {
-            dragPanel1 = new AjaxControlToolkit.DragPanelExtender
-            {
-                TargetControlID = "pnlDrag",
-                DragHandleID = "pnlDragHandle"
-            };
-        }
-    }
-
-    // Ajax Control Toolkit ReorderList
-    public class ReorderListExample
-    {
-        protected AjaxControlToolkit.ReorderList reorderList1;
-
-        private void InitializeControls()
-        {
-            reorderList1 = new AjaxControlToolkit.ReorderList
-            {
-                AllowReorder = true,
-                PostBackOnReorder = true
-            };
-        }
-    }
-
-    // Ajax Control Toolkit ValidatorCallout
-    public class ValidatorCalloutExample
-    {
-        protected AjaxControlToolkit.ValidatorCalloutExtender validatorCallout1;
-
-        private void InitializeControls()
-        {
-            validatorCallout1 = new AjaxControlToolkit.ValidatorCalloutExtender
-            {
-                TargetControlID = "rfvName",
-                HighlightCssClass = "validatorCalloutHighlight"
+                EnableCompression = true,
+                Timeout = 30000,
+                CacheControl = "no-cache"
             };
         }
     }

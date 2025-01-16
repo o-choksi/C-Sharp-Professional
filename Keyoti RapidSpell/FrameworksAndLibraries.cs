@@ -1,122 +1,169 @@
+using Keyoti.RapidSpell;
+using Keyoti.RapidSpell.Dictionary;
+using Keyoti.RapidSpell.Phonetics;
+using Keyoti.RapidSpell.Suggestions;
+using Keyoti.RapidSpell.Languages;
 using System;
+using System.Collections.Generic;
+using System.Text;
+using System.IO;
+using System.Linq;
 
 namespace KeyotiRapidSpell
 {
-    // Core RapidSpell functionality
-    using Keyoti.RapidSpell;
-    public class SpellCheckerExample 
+    public class BasicSpellCheckExample
     {
-        private readonly RapidSpellAsYouType _spellChecker = new RapidSpellAsYouType();
-        public void ConfigureSpellChecker() 
+        public void BasicSpellCheck()
         {
-            _spellChecker.CheckAsYouType = true;
-            _spellChecker.ShowDialog = true;
+            var spellChecker = new SpellChecker();
+            bool isCorrect = spellChecker.TestWord("hello");
+            bool isIncorrect = spellChecker.TestWord("helo");
         }
     }
 
-    // Dictionary management
-    using Keyoti.RapidSpell.Dictionaries;
-    public class DictionaryExample 
+    public class CustomDictionaryExample 
     {
-        private readonly WordDictionary _dictionary = new WordDictionary();
-        public void LoadDictionary() 
+        public void CustomDictionary()
         {
-            _dictionary.LoadDictionary("en-US.dic");
-            _dictionary.AddWord("CustomWord");
+            var spellChecker = new SpellChecker();
+            spellChecker.Dictionary.Add("customword");
+            bool exists = spellChecker.TestWord("customword");
         }
     }
 
-    // Spell checking options
-    using Keyoti.RapidSpell.SpellChecking;
-    public class SpellCheckOptionsExample 
+    public class PhoneticExample
     {
-        private readonly SpellCheckOptions _options = new SpellCheckOptions();
-        public void ConfigureOptions() 
+        public void PhoneticMatching()
         {
-            _options.IgnoreAllCaps = true;
-            _options.IgnoreNumbers = true;
-            _options.SuggestionsMethod = SuggestionsMethodEnum.PhoneticAndTypo;
+            var spellChecker = new SpellChecker();
+            spellChecker.PhoneticMatching = true;
+            var suggestions = spellChecker.Suggest("fone");
+            bool hasPhoneSuggestion = suggestions.Contains("phone");
         }
     }
 
-    // Custom dictionary handling
-    using Keyoti.RapidSpell.UserDictionaries;
-    public class UserDictionaryExample 
+    public class SuggestionDistanceExample
     {
-        private readonly UserDictionary _userDict = new UserDictionary();
-        public void ManageUserDictionary() 
+        public void SuggestionDistance()
         {
-            _userDict.AddWord("CompanyName");
-            _userDict.SaveDictionary("custom.dic");
+            var spellChecker = new SpellChecker();
+            spellChecker.SuggestionDistance = 2;
+            var suggestions = spellChecker.Suggest("recieve");
+            bool hasCorrectSuggestion = suggestions.Contains("receive");
         }
     }
 
-    // Spell check events
-    using Keyoti.RapidSpell.Events;
-    public class SpellCheckEventsExample 
+    public class LanguageExample
     {
-        private readonly RapidSpellChecker _checker = new RapidSpellChecker();
-        public void SetupEvents() 
+        public void LanguageSupport()
         {
-            _checker.MisspelledWord += (sender, args) => {Console.WriteLine($"Misspelled word: {args.Word}");};
+            var spellChecker = new SpellChecker();
+            spellChecker.LoadDictionary(Language.French);
+            bool isFrenchWordCorrect = spellChecker.TestWord("bonjour");
         }
     }
 
-    // Language support
-    using Keyoti.RapidSpell.Languages;
-    public class LanguageExample 
+    public class IgnoreNumbersExample
     {
-        private readonly LanguageConfig _langConfig = new LanguageConfig();
-        public void ConfigureLanguage() 
+        public void IgnoreNumbers()
         {
-            _langConfig.SetLanguage(LanguageType.English);
-            _langConfig.LoadAlternateSpellings();
+            var spellChecker = new SpellChecker();
+            spellChecker.IgnoreNumbers = true;
+            bool isNumberIgnored = spellChecker.TestWord("123");
         }
     }
 
-    // Text processing
-    using Keyoti.RapidSpell.TextProcessing;
-    public class TextProcessExample 
+    public class CaseSensitivityExample
     {
-        private readonly TextProcessor _processor = new TextProcessor();
-        public string[] ProcessText(string text) 
+        public void CaseSensitivity()
         {
-            return _processor.SplitIntoWords(text);
+            var spellChecker = new SpellChecker();
+            spellChecker.CaseSensitive = true;
+            bool isCapitalCorrect = spellChecker.TestWord("Hello");
+            bool isLowercaseIncorrect = spellChecker.TestWord("hello");
         }
     }
 
-    // Spell check dialog
-    using Keyoti.RapidSpell.Dialog;
-    public class SpellDialogExample 
+    public class CustomSuggestionExample
     {
-        private readonly SpellCheckDialog _dialog = new SpellCheckDialog();
-        public void ShowSpellDialog(string text) 
+        public void CustomSuggestions()
         {
-            _dialog.Text = text;
-            _dialog.ShowDialog();
+            var spellChecker = new SpellChecker();
+            spellChecker.SuggestionProvider = new CustomSuggestionProvider();
+            var suggestions = spellChecker.Suggest("tst");
+            bool hasCustomSuggestion = suggestions.Contains("test");
         }
     }
 
-    // Custom suggestions
-    using Keyoti.RapidSpell.Suggestions;
-    public class SuggestionsExample 
+    public class DictionaryLoadingExample
     {
-        private readonly SuggestionGenerator _generator = new SuggestionGenerator();
-        public string[] GetSuggestions(string word) 
+        public void LoadDictionary()
         {
-            return _generator.GetSuggestions(word, 5);
+            var spellChecker = new SpellChecker();
+            spellChecker.LoadDictionaryFromFile("custom.dic");
+            int wordCount = spellChecker.Dictionary.Count;
         }
     }
 
-    // Configuration settings
-    using Keyoti.RapidSpell.Configuration;
-    public class ConfigurationExample 
+    public class WordReplacementExample
     {
-        private readonly SpellCheckerConfig _config = new SpellCheckerConfig();
-        public void SetConfiguration() 
+        public void ReplaceWord()
         {
-            _config.MaxSuggestions = 10;
-            _config.CaseSensitive = false;
+            var spellChecker = new SpellChecker();
+            string text = "teh quick brown fox";
+            string corrected = spellChecker.ReplaceWord(text, "teh", "the");
+        }
+    }
+
+    public class IgnoreWordsExample
+    {
+        public void IgnoreWords()
+        {
+            var spellChecker = new SpellChecker();
+            spellChecker.IgnoreList.Add("xyz");
+            bool isIgnoredWordAccepted = spellChecker.TestWord("xyz");
+        }
+    }
+
+    public class TextStatsExample
+    {
+        public void TextStatistics()
+        {
+            var spellChecker = new SpellChecker();
+            var stats = spellChecker.GetTextStatistics("Hello world");
+            int wordCount = stats.WordCount;
+        }
+    }
+
+    public class BatchProcessingExample
+    {
+        public void BatchProcess()
+        {
+            var spellChecker = new SpellChecker();
+            string[] words = new[] { "hello", "wrld" };
+            bool[] results = spellChecker.TestWords(words);
+        }
+    }
+
+    public class DictionaryExportExample
+    {
+        public void ExportDictionary()
+        {
+            var spellChecker = new SpellChecker();
+            spellChecker.Dictionary.Add("customterm");
+            spellChecker.Dictionary.SaveToFile("export.dic");
+        }
+    }
+
+    public class MultipleDictionaryExample
+    {
+        public void MultipleDictionaries()
+        {
+            var spellChecker = new SpellChecker();
+            spellChecker.LoadDictionary(Language.English);
+            spellChecker.LoadDictionary(Language.Spanish);
+            bool isEnglishWordCorrect = spellChecker.TestWord("hello");
+            bool isSpanishWordCorrect = spellChecker.TestWord("hola");
         }
     }
 }

@@ -14,7 +14,7 @@ using Oracle.ManagedDataAccess.Configuration;
 using Oracle.ManagedDataAccess.Performance;
 using Oracle.ManagedDataAccess.HA;
 
-namespace OracleExamples
+namespace OracleManagedDataAccess
 {
     // Oracle.ManagedDataAccess.Client Example
     public class ClientExample

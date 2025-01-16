@@ -14,7 +14,7 @@ using Microsoft.Extensions.Logging;
 using System.Net.Http;
 using System.Net.Http.Json;
 
-namespace BlazorExamples
+namespace Blazor
 {
     // Microsoft.AspNetCore.Components Example
     public class ComponentExample : ComponentBase
